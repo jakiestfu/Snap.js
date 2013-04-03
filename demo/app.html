@@ -19,17 +19,6 @@
 	    		margin: 0;
 	    		padding: 0;
 	    	}
-
-			#log{
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				background:rgba(0,0,0,0.5);
-				padding:5px;
-				z-index: 999;
-				font-family: monospace;
-				color: #fff;
-			}
 			
 			#no-drag{
 				position: absolute;
@@ -98,7 +87,6 @@
 
 	</head>
 	<body>
-		<div id="log">Log</div>
 		<div class="relative tall">
 			<div class="drawers absolute">
 				<div class="left-drawer absolute"></div>
@@ -111,7 +99,7 @@
 					<div id="toolbar" class="absolute">
 						<a href="#" id="toggle">Toggle Left</a>
 					</div>
-					<div id="no-drag" data-snap-ignore></div>
+					<div id="no-drag" data-snap-ignore>No Drag</div>
 				</div>
 			</div>
 		</div>
@@ -120,23 +108,33 @@
 		<script type="text/javascript">
 
 			
-
+			function updateLog(sn){
+				var state = sn.state(),
+					theState = 'State: '+state.state+"\n";
+				
+				theState += 'Opening: '+state.info.opening+"\n";
+				theState += 'Towards: '+state.info.towards+"\n";
+				theState += 'HyperExtending: '+state.info.hyperExtending+"\n";
+				theState += 'HalfWay: '+state.info.halfway+"\n";
+				theState += 'Flickable: '+state.info.flick+"\n";
+				theState += 'Translation.absolute: '+state.info.translation.absolute+"\n";
+				theState += 'Translation.relative: '+state.info.translation.relative+"\n";
+				theState += 'Translation.sinceDirectionChange: '+state.info.translation.sinceDirectionChange+"\n";
+				
+				window.parent.document.getElementById('log').value=theState;
+			}
+			
 
 			var snapper = new Snap({
 				element: document.getElementById('content')
 			});
 
-			snapper.on('start', function(){
-				console.log('start');
-			}).on('drag', function(){
-				console.log('drag');
-			}).on('end', function(){
-				console.log('end');
-			}).on('ignore', function(){
-				console.log('ignored');
+			snapper.on('drag', function(){
+				updateLog(snapper);
+			}).on('animated', function(){
+				updateLog(snapper);
 			});
 
-			snapper.off('drag');
 
 			document.getElementById('toggle').addEventListener('click', function(){
 				if(snapper.state().state=="left"){
