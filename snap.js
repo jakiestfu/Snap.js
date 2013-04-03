@@ -20,7 +20,9 @@
             flickThreshold: 50,
             transitionSpeed: 0.3,
             maxPosition: 266,
-            minPosition: -266
+            minPosition: -266,
+            tapToClose: true,
+            slideIntent: 60 // degrees
         },
         cache = {},
         eventList = {},
@@ -35,7 +37,7 @@
                 return eventTypes[action];
             },
             dispatchEvent: function(type){
-                if(typeof eventList[type]=='function'){
+                if(typeof eventList[type]==='function'){
                     eventList[type].call();
                 }
             },
@@ -50,6 +52,20 @@
                     }
                 }
                 return destination;
+            },
+            angleOfDrag: function(x,y){
+                
+                var degrees, theta;
+                
+                // Calc Theta
+                theta = Math.atan2(-(cache.startDragY-y), (cache.startDragX-x));
+                if (theta < 0){ theta += 2 * Math.PI; }
+                
+                // Calc Degrees
+                degrees = Math.floor(theta*(180 / Math.PI) - 180);
+                if(degrees<0 && degrees>-180){ degrees = 360 - Math.abs(degrees); }
+                
+                return Math.abs(degrees);
             },
             events: {
                 addEvent: function addEvent(element, eventName, func) {
@@ -122,12 +138,16 @@
                     utils.dispatchEvent('start');
                     settings.element.style.webkitTransition = '';
                     cache.isDragging = true;
+                    cache.hasIntent = null;
+                    cache.intentChecked = false;
                     cache.startDragX = e.pageX;
+                    cache.startDragY = e.pageY;
                     cache.dragWatchers = {
                         current: 0,
                         last: 0,
                         hold: 0,
                         state: ''
+                        
                     };
                     cache.simpleStates = {
                         opening: null,
@@ -140,10 +160,26 @@
                             relative: 0,
                             sinceDirectionChange: 0
                         }
-                    }
+                    };
                 },
                 dragging: function(e){
                     if(cache.isDragging){
+                        
+                        if(cache.intentChecked && !cache.hasIntent){
+                            return;
+                        }
+                        if(cache.hasIntent===false || cache.hasIntent===null){
+                            var deg = utils.angleOfDrag(e.pageX, e.pageY),
+                                inRightRange = (deg>=0 && deg<=settings.slideIntent) || (deg<=360 && deg>(360-settings.slideIntent) ),
+                                inLeftRange = (deg>=180 && deg<=(180+settings.slideIntent) ) || (deg<=180 && deg>=(180-settings.slideIntent) );
+                            
+                            if(!inLeftRange && !inRightRange){
+                                cache.hasIntent = false;
+                            } else {
+                                cache.hasIntent = true;
+                            }
+                            cache.intentChecked = true;
+                        }
                         
                         utils.dispatchEvent('drag');
                         
@@ -158,13 +194,13 @@
                         
                         // Determine which direction we are going
                         if(cache.dragWatchers.last > pageX){
-                            if(cache.dragWatchers.state!='left'){
+                            if(cache.dragWatchers.state!=='left'){
                                 cache.dragWatchers.state='left';
                                 cache.dragWatchers.hold=pageX;
                             }
                             cache.dragWatchers.last = pageX;
                         } else if(cache.dragWatchers.last < pageX) {
-                            if(cache.dragWatchers.state!='right'){
+                            if(cache.dragWatchers.state!=='right'){
                                 cache.dragWatchers.state='right';
                                 cache.dragWatchers.hold=pageX;
                             }
@@ -220,22 +256,22 @@
                         var translated = action.translate.get.matrix(4);
                         
                         // Tap Close
-                        if(cache.dragWatchers.current===0 && translated!==0){
+                        if(cache.dragWatchers.current===0 && translated!==0 && settings.tapToClose){
                             action.translate.easeTo(0);
                             cache.isDragging = false;
                             cache.startDragX = 0;
                             return;
                         }
-    
+                        
                         // Revealing Left
-                        if(cache.simpleStates.opening=='left'){
+                        if(cache.simpleStates.opening==='left'){
                             
                             // Halfway, Flicking, or Too Far Out
                             if((cache.simpleStates.halfway || cache.simpleStates.hyperExtending || cache.simpleStates.flick)){
-                                if(cache.simpleStates.flick && cache.simpleStates.towards=='left'){ // Flicking Closed
+                                if(cache.simpleStates.flick && cache.simpleStates.towards==='left'){ // Flicking Closed
                                     action.translate.easeTo(0);
                                 } else if(
-                                    (cache.simpleStates.flick && cache.simpleStates.towards=='right') || // Flicking Open OR
+                                    (cache.simpleStates.flick && cache.simpleStates.towards==='right') || // Flicking Open OR
                                     (cache.simpleStates.halfway || cache.simpleStates.hyperExtending) // At least halfway open OR hyperextending
                                 ) {
                                     action.translate.easeTo(settings.maxPosition); // Open Left
@@ -245,14 +281,14 @@
                             }
                         
                         // Revealing Right
-                        } else if(cache.simpleStates.opening=='right'){
+                        } else if(cache.simpleStates.opening==='right'){
                             
                             // Halfway, Flicking, or Too Far Out
                             if((cache.simpleStates.halfway || cache.simpleStates.hyperExtending || cache.simpleStates.flick)){
-                                if(cache.simpleStates.flick && cache.simpleStates.towards=='right'){ // Flicking Closed
+                                if(cache.simpleStates.flick && cache.simpleStates.towards==='right'){ // Flicking Closed
                                     action.translate.easeTo(0);
                                 } else if(
-                                    (cache.simpleStates.flick && cache.simpleStates.towards=='left') || // Flicking Open OR
+                                    (cache.simpleStates.flick && cache.simpleStates.towards==='left') || // Flicking Open OR
                                     (cache.simpleStates.halfway || cache.simpleStates.hyperExtending) // At least halfway open OR hyperextending
                                 ) {
                                     action.translate.easeTo(settings.minPosition); // Open Right
@@ -278,9 +314,9 @@
          * Public
          */
         this.open = function(side){
-            if(side=='left'){
+            if(side==='left'){
                 action.translate.easeTo(settings.maxPosition);
-            } else if(side=='right'){
+            } else if(side==='right'){
                 action.translate.easeTo(settings.minPosition);
             }
         },
@@ -300,10 +336,9 @@
             
             var state,
                 fromLeft = action.translate.get.matrix(4);
-            console.log(fromLeft+'=='+settings.maxPosition);
-            if(fromLeft == settings.maxPosition){
+            if(fromLeft === settings.maxPosition){
                 state = 'left';
-            } else if(fromLeft == settings.minPosition){
+            } else if(fromLeft === settings.minPosition){
                 state = 'right';
             } else {
                 state = 'closed';
