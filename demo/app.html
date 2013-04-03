@@ -1,150 +1,153 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
-	<head>
-	    <title>Snap.js</title>
+    <head>
+        <title>Snap.js</title>
 
-	    <meta http-equiv="x-ua-compatible" content="IE=edge" />
-	    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-	    <meta name="apple-mobile-web-app-capable" content="yes">
-	    <meta name="apple-touch-fullscreen" content="yes">
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-touch-fullscreen" content="yes">
 
-	    <style type="text/css">
+        <style type="text/css">
 
-	    	html, body{
-	    		height: 100%;
-	    		overflow: hidden;
-	    	}
+            html, body{
+                height: 100%;
+                overflow: hidden;
+            }
 
-	    	body{
-	    		margin: 0;
-	    		padding: 0;
-	    	}
-			
-			#no-drag{
-				position: absolute;
-				top:50%;
-				left: 50%;
-				width: 50%;
-				height: 100px;
-				margin-left: -25%;
-				margin-top: -50px;
-				background: red;
-			}
-			
-	    	.tall{ height: 100%; }
-	    	.relative{ position: relative; }
-	    	.absolute{ position: absolute; }
-			
-			.left{ float: left; }
-			.right{ float: right;}
+            body{
+                margin: 0;
+                padding: 0;
+            }
+            
+            #no-drag{
+                position: absolute;
+                top:50%;
+                left: 50%;
+                width: 50%;
+                height: 100px;
+                margin-left: -25%;
+                margin-top: -50px;
+                background: red;
+            }
+            
+            .tall{ height: 100%; }
+            .relative{ position: relative; }
+            .absolute{ position: absolute; }
+            
+            .left{ float: left; }
+            .right{ float: right;}
 
-	    	#toolbar{
-	    		height: 44px;
-	    		top: 0;
-	    		left: 0;
-	    		right: 0;
-	    		background: #536ea7;
-	    		border-bottom: 1px solid #111b32;
-	    	}
-	    	.left-drawer{
-	    		border-right: 1px solid #242a36;
-	    	}
-	    	.right-drawer{
-	    		border-left: 1px solid #242a36;
-	    	}
-
-
-	    	#content{
-	    		background: #BFC7D8;
-	    		top: 0;
-	    		left: 0;
-	    		right: 0;
-	    		bottom: 0;
-	    		-webkit-transform: translate3d(0, 0, 0);
-	    	}
-
-	    	.drawers{
-	    		background: #323949;
-	    		top: 0;
-	    		left: 0;
-	    		right: 0;
-	    		bottom: 0;
-	    	}
-	    	.left-drawer,
-	    	.right-drawer{
-	    		top: 0;
-	    		left: 0;
-	    		width: 265px;
-	    		bottom: 0;
-	    		background: #323949;
-	    	}
-	    	.right-drawer{
-	    		left: auto;
-	    		right: 0;
-	    	}
-
-	    </style>
-
-	</head>
-	<body>
-		<div class="relative tall">
-			<div class="drawers absolute">
-				<div class="left-drawer absolute"></div>
-				<div class="right-drawer absolute"></div>
-			</div>
-
-			
-			<div id="content" class="absolute">
-				<div class="relative tall">
-					<div id="toolbar" class="absolute">
-						<a href="#" id="toggle">Toggle Left</a>
-					</div>
-					<div id="no-drag" data-snap-ignore>No Drag</div>
-				</div>
-			</div>
-		</div>
-
-		<script type="text/javascript" src="../snap.js"></script>
-		<script type="text/javascript">
-
-			
-			function updateLog(sn){
-				var state = sn.state(),
-					theState = 'State: '+state.state+"\n";
-				
-				theState += 'Opening: '+state.info.opening+"\n";
-				theState += 'Towards: '+state.info.towards+"\n";
-				theState += 'HyperExtending: '+state.info.hyperExtending+"\n";
-				theState += 'HalfWay: '+state.info.halfway+"\n";
-				theState += 'Flickable: '+state.info.flick+"\n";
-				theState += 'Translation.absolute: '+state.info.translation.absolute+"\n";
-				theState += 'Translation.relative: '+state.info.translation.relative+"\n";
-				theState += 'Translation.sinceDirectionChange: '+state.info.translation.sinceDirectionChange+"\n";
-				
-				window.parent.document.getElementById('log').value=theState;
-			}
-			
-
-			var snapper = new Snap({
-				element: document.getElementById('content')
-			});
-
-			snapper.on('drag', function(){
-				updateLog(snapper);
-			}).on('animated', function(){
-				updateLog(snapper);
-			});
+            #toolbar{
+                height: 44px;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: #536ea7;
+                border-bottom: 1px solid #111b32;
+            }
+            .left-drawer{
+                border-right: 1px solid #242a36;
+            }
+            .right-drawer{
+                border-left: 1px solid #242a36;
+            }
 
 
-			document.getElementById('toggle').addEventListener('click', function(){
-				if(snapper.state().state=="left"){
-					snapper.close();
-				} else {
-					snapper.open('left');
-				}
-			});
+            #content{
+                background: #BFC7D8;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                -webkit-transform: translate3d(0, 0, 0);
+            }
+
+            .drawers{
+                background: #323949;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+            .left-drawer,
+            .right-drawer{
+                top: 0;
+                left: 0;
+                width: 265px;
+                bottom: 0;
+                background: #323949;
+            }
+            .right-drawer{
+                left: auto;
+                right: 0;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <div class="relative tall">
+            <div class="drawers absolute">
+                <div class="left-drawer absolute"></div>
+                <div class="right-drawer absolute"></div>
+            </div>
+
+            
+            <div id="content" class="absolute">
+                <div class="relative tall">
+                    <div id="toolbar" class="absolute">
+                        <a href="#" id="toggle">Toggle Left</a>
+                    </div>
+                    <div id="no-drag" data-snap-ignore>No Drag</div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="../snap.js"></script>
+        <script type="text/javascript">
+
+            
+            function updateLog(sn){
+                var log = window.parent.document.getElementById('log');
+                if(log){
+                    var state = sn.state(),
+                        theState = 'State: '+state.state+"\n";
+                    
+                    theState += 'Opening: '+state.info.opening+"\n";
+                    theState += 'Towards: '+state.info.towards+"\n";
+                    theState += 'HyperExtending: '+state.info.hyperExtending+"\n";
+                    theState += 'HalfWay: '+state.info.halfway+"\n";
+                    theState += 'Flickable: '+state.info.flick+"\n";
+                    theState += 'Translation.absolute: '+state.info.translation.absolute+"\n";
+                    theState += 'Translation.relative: '+state.info.translation.relative+"\n";
+                    theState += 'Translation.sinceDirectionChange: '+state.info.translation.sinceDirectionChange+"\n";
+                    
+                    log.value=theState;
+                }
+            }
+            
+
+            var snapper = new Snap({
+                element: document.getElementById('content')
+            });
+
+            snapper.on('drag', function(){
+                updateLog(snapper);
+            }).on('animated', function(){
+                updateLog(snapper);
+            });
 
 
-		</script>
-	</body>
+            document.getElementById('toggle').addEventListener('click', function(){
+                if(snapper.state().state=="left"){
+                    snapper.close();
+                } else {
+                    snapper.open('left');
+                }
+            });
+
+
+        </script>
+    </body>
 </html>
