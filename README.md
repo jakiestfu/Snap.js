@@ -91,19 +91,19 @@ The data returned from the `state` method will look like the following:
 
 ```javascript
 {
-  state: "closed", // State of the Pane
-  info:{
-    opening: "left", // Side which user intends to open
-    towards: "right", // Direction user is dragging towards
-    hyperExtending: false, // True if user is pulling past predefined bounds
-    halfway: false, // True if pane is at least halfway open
-    flick: false, // True if user has moved pane X amount of pixels in the open/close direction without changing directions
-    translation:{
-      absolute: 20, // Pixels pane has translated
-      relative: 21, // Pixels pane has translated relative to starting translation
-      sinceDirectionChange: 10 // Pixels pane has translated since the direction of the pane has changed
+    state: "closed", // State of the Pane
+    info:{
+        opening: "left", // Side which user intends to open
+        towards: "right", // Direction user is dragging towards
+        hyperExtending: false, // True if user is pulling past predefined bounds
+        halfway: false, // True if pane is at least halfway open
+        flick: false, // True if user has moved pane X amount of pixels in the open/close direction without changing directions
+        translation:{
+            absolute: 20, // Pixels pane has translated
+            relative: 21, // Pixels pane has translated relative to starting translation
+            sinceDirectionChange: 10 // Pixels pane has translated since the direction of the pane has changed
+        }
     }
-  }
 } 
 ```
 
@@ -116,17 +116,32 @@ Two absolute elements, one to represent *all* the content, and another to repres
 
 ```html
 div.drawers {position: absolute;}
-  div.left-drawer  {position: absolute;}
-    [content]
-  div.right-drawer  {position: absolute;}
-    [content]
+    div.left-drawer  {position: absolute;}
+        [content]
+    div.right-drawer  {position: absolute;}
+        [content]
 div#content {position: absolute;}
-  [top-bars]
-  [content] {overflow: auto}
-  [bottom-bars]
+    [top-bars]
+    [content] {overflow: auto}
+    [bottom-bars]
 ```
 
 A sample layout is found in demo/apps/default.html.
+
+### Independent Scrolling
+Some CSS is required to get some smooth ass scrolling. Utilize the CSS below to apply this to any of your elements:
+```css
+.scrollable{
+	overflow: auto;
+	-webkit-transition-property: top, bottom;
+	transition-property: top, bottom;
+	-webkit-transition-duration: .2s, .2s;
+	transition-duration: .2s, .2s;
+	-webkit-transition-timing-function: linear, linear;
+	transition-timing-function: linear, linear;
+	-webkit-overflow-scrolling: touch;
+}
+```
 
 ### Z-Indexes and Display
 Because of the nature of this code, drawers are just kind of stacked behind the content. To bring the proper drawer to the fron, you can hook into Snaps event system:
