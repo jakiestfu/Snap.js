@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Snap.js by jakiestfu</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Snap.js</h1>
+        <p>Emulates native side-menus in Javascript</p>
+
+        <p class="view"><a href="https://github.com/jakiestfu/Snap.js">View the Project on GitHub <small>jakiestfu/Snap.js</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/jakiestfu/Snap.js/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jakiestfu/Snap.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jakiestfu/Snap.js">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><img src="http://i.imgur.com/NRveBu0.png"></p>
+
+<h2>Usage</h2>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">snapper</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Snap</span><span class="p">({</span>
+  <span class="nx">element</span><span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'content'</span><span class="p">)</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Settings and Defaults</h2>
+
+<div class="highlight"><pre><span class="nx">settings</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">element</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">resistance</span><span class="o">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="nx">flickThreshold</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="nx">transitionSpeed</span><span class="o">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="nx">easing</span><span class="o">:</span> <span class="s1">'ease'</span><span class="p">,</span>
+    <span class="nx">maxPosition</span><span class="o">:</span> <span class="mi">266</span><span class="p">,</span>
+    <span class="nx">minPosition</span><span class="o">:</span> <span class="o">-</span><span class="mi">266</span><span class="p">,</span>
+    <span class="nx">tapToClose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">slideIntent</span><span class="o">:</span> <span class="mi">40</span>
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li>
+<strong><code>element</code></strong>: The element which the user will be sliding side to side</li>
+<li>
+<strong><code>resistance</code></strong>: The cooeficcient used to slow sliding when user has passed max or min threshold</li>
+<li>
+<strong><code>flickThreshold</code></strong>: Number of pixels the user needs to swiftly travel to activate a "flick" open</li>
+<li>
+<strong><code>transitionSpeed</code></strong>: The speed at which the pane slides open or closed</li>
+<li>
+<strong><code>easing</code></strong>: The CSS3 Easing method you want to use for transitions</li>
+<li>
+<strong><code>maxPosition</code></strong>: Maximum number of pixels the pane may be slid to the right</li>
+<li>
+<strong><code>minPosition</code></strong>: Maximum number of pixels the pane may be slid to the left</li>
+<li>
+<strong><code>tapToClose</code></strong>: If true, tapping an open pane will close it</li>
+<li>
+<strong><code>slideIntent</code></strong>: The number of degrees the user must initiate sliding in towards the left or right (see diagram below)</li>
+</ul><p>Notes on Slide Intent: The slide intent is an int between 0 and 90, and represents the degrees in the first quadrant of a circle that you would like to have mirrored on the X <em>and</em> Y axis. For example, if you have 40 set as your <code>slideIntent</code> value, the user would only be able to slide the pane by dragging in the blue area in the diagram below. Once intent has been defined, it will not change until the user releases.</p>
+
+<p><img src="http://i.imgur.com/uG2CNR8.png"></p>
+
+<h2>Public Methods</h2>
+
+<h3>
+<code>open</code>: Opens the pane to the specified side</h3>
+
+<div class="highlight"><pre><span class="nx">snapper</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'left'</span><span class="p">);</span>
+<span class="c1">// OR</span>
+<span class="nx">snapper</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'right'</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<code>close</code>: Closes the pane</h3>
+
+<div class="highlight"><pre><span class="nx">snapper</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<code>on</code>: Adds an event hook</h3>
+
+<div class="highlight"><pre><span class="nx">snapper</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'start'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">// Do Something</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>The available methods to hook into are as follows:</p>
+
+<ul>
+<li>
+<code>start</code>: Fired when touching down on the draggable pane and it begins to move</li>
+<li>
+<code>drag</code>: Fired when the pane has been moved or slid</li>
+<li>
+<code>stop</code>: Fired when the pane has been let go od</li>
+<li>
+<code>animating</code>: Fired when the pane is animating</li>
+<li>
+<code>animated</code>: Fired when the pane is finished it's animations</li>
+<li>
+<code>ignore</code>: Fired when trying to drag the pane but ended up dragging on an ignored element</li>
+</ul><h3>
+<code>off</code>: Removes an event hook</h3>
+
+<div class="highlight"><pre><span class="nx">snapper</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">'drag'</span><span class="p">);</span>
+</pre></div>
+
+<p>The event names listed above apply for the <code>off</code> method.</p>
+
+<h3>
+<code>state</code>: Returns detailed information about the state of the pane</h3>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">snapper</span><span class="p">.</span><span class="nx">state</span><span class="p">();</span>
+</pre></div>
+
+<p>The data returned from the <code>state</code> method will look like the following:</p>
+
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="nx">state</span><span class="o">:</span> <span class="s2">"closed"</span><span class="p">,</span> <span class="c1">// State of the Pane</span>
+    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">opening</span><span class="o">:</span> <span class="s2">"left"</span><span class="p">,</span> <span class="c1">// Side which user intends to open</span>
+        <span class="nx">towards</span><span class="o">:</span> <span class="s2">"right"</span><span class="p">,</span> <span class="c1">// Direction user is dragging towards</span>
+        <span class="nx">hyperExtending</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// True if user is pulling past predefined bounds</span>
+        <span class="nx">halfway</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// True if pane is at least halfway open</span>
+        <span class="nx">flick</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// True if user has moved pane X amount of pixels in the open/close direction without changing directions</span>
+        <span class="nx">translation</span><span class="o">:</span><span class="p">{</span>
+            <span class="nx">absolute</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span> <span class="c1">// Pixels pane has translated</span>
+            <span class="nx">relative</span><span class="o">:</span> <span class="mi">21</span><span class="p">,</span> <span class="c1">// Pixels pane has translated relative to starting translation</span>
+            <span class="nx">sinceDirectionChange</span><span class="o">:</span> <span class="mi">10</span> <span class="c1">// Pixels pane has translated since the direction of the pane has changed</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span> 
+</pre></div>
+
+<h2>Gotchas</h2>
+
+<h3>Layout</h3>
+
+<p>The layout itself is what most people will have a hard time emulating, so the simplest approach I have found is as follows:</p>
+
+<p>Two absolute elements, one to represent <em>all</em> the content, and another to represent <em>all</em> the drawers. The content has a higher z-index than the drawers. Within the drawers element, it's direct children should represent the containers for the drawers, these should be <code>fixed</code> or <code>absolute</code>. Assigning classes to your drawers to specify which side it is on is recommended. All absolutely positioned elements should have 0 for <code>top, left, right, bottom</code> properties, excluding your panes which will have <code>auto</code> set to their respective sides and a width assigned. The width of your drawers is usually the same number you want to use for <code>minPosition</code> and <code>maxPosition</code></p>
+
+<div class="highlight"><pre>div.drawers {position: absolute;}
+    div.left-drawer  {position: absolute;}
+        [content]
+    div.right-drawer  {position: absolute;}
+        [content]
+div#content {position: absolute;}
+    [top-bars]
+    [content] {overflow: auto}
+    [bottom-bars]
+</pre></div>
+
+<p>A sample layout is found in demo/apps/default.html.</p>
+
+<h3>Independent Scrolling</h3>
+
+<p>Some CSS is required to get some smooth ass scrolling. Utilize the CSS below to apply this to any of your elements:</p>
+
+<div class="highlight"><pre><span class="nc">.scrollable</span><span class="p">{</span>
+    <span class="k">overflow</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transition</span><span class="o">-</span><span class="n">property</span><span class="o">:</span> <span class="k">top</span><span class="o">,</span> <span class="k">bottom</span><span class="p">;</span>
+    <span class="n">transition</span><span class="o">-</span><span class="n">property</span><span class="o">:</span> <span class="k">top</span><span class="o">,</span> <span class="k">bottom</span><span class="p">;</span>
+    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transition</span><span class="o">-</span><span class="n">duration</span><span class="o">:</span> <span class="m">.2s</span><span class="o">,</span> <span class="m">.2s</span><span class="p">;</span>
+    <span class="n">transition</span><span class="o">-</span><span class="n">duration</span><span class="o">:</span> <span class="m">.2s</span><span class="o">,</span> <span class="m">.2s</span><span class="p">;</span>
+    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transition</span><span class="o">-</span><span class="n">timing</span><span class="o">-</span><span class="n">function</span><span class="o">:</span> <span class="n">linear</span><span class="o">,</span> <span class="n">linear</span><span class="p">;</span>
+    <span class="n">transition</span><span class="o">-</span><span class="n">timing</span><span class="o">-</span><span class="n">function</span><span class="o">:</span> <span class="n">linear</span><span class="o">,</span> <span class="n">linear</span><span class="p">;</span>
+    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="k">overflow</span><span class="o">-</span><span class="n">scrolling</span><span class="o">:</span> <span class="n">touch</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>Z-Indexes and Display</h3>
+
+<p>Because of the nature of this code, drawers are just kind of stacked behind the content. To bring the proper drawer to the fron, you can hook into Snaps event system:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">UpdateDrawers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">state</span> <span class="o">=</span> <span class="nx">snapper</span><span class="p">.</span><span class="nx">state</span><span class="p">(),</span>
+        <span class="nx">towards</span> <span class="o">=</span> <span class="nx">state</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">towards</span><span class="p">,</span>
+        <span class="nx">opening</span> <span class="o">=</span> <span class="nx">state</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">opening</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">opening</span><span class="o">==</span><span class="s1">'right'</span> <span class="o">&amp;&amp;</span> <span class="nx">towards</span><span class="o">==</span><span class="s1">'left'</span><span class="p">){</span>
+        <span class="c1">// Revealing Right Drawer, apply CSS to that droor to bring it to the front.</span>
+    <span class="c1">// Usually, display:block works if you set all panes to display:none;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">opening</span><span class="o">==</span><span class="s1">'left'</span> <span class="o">&amp;&amp;</span> <span class="nx">towards</span><span class="o">==</span><span class="s1">'right'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Revealing left Drawer</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// Bind Events</span>
+<span class="nx">snapper</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'drag'</span><span class="p">,</span> <span class="nx">UpdateDrawers</span><span class="p">);</span>
+<span class="nx">snapper</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'animating'</span><span class="p">,</span> <span class="nx">UpdateDrawers</span><span class="p">);</span>
+<span class="nx">snapper</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'animated'</span><span class="p">,</span> <span class="nx">UpdateDrawers</span><span class="p">);</span>
+</pre></div>
+
+<p>An example of this code in action can be found in demo/apps/ratchet/template.html</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/jakiestfu">jakiestfu</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
