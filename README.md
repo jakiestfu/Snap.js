@@ -12,6 +12,34 @@ var snapper = new Snap({
 });
 ```
 
+## Settings and Defaults
+```javascript
+settings = {
+    element: null,
+    resistance: 0.5,
+    flickThreshold: 50,
+    transitionSpeed: 0.3,
+    maxPosition: 266,
+    minPosition: -266,
+    tapToClose: true,
+    slideIntent: 40
+}
+```
+
+* **`element`**: The element which the user will be sliding side to side
+* **`resistance`**: The cooeficcient used to slow sliding when user has passed max or min threshold
+* **`flickThreshold`**: Number of pixels the user needs to swiftly travel to activate a "flick" open
+* **`transitionSpeed`**: The speed at which the pane slides open or closed
+* **`maxPosition`**: Maximum number of pixels the pane may be slid to the right
+* **`minPosition`**: Maximum number of pixels the pane may be slid to the left
+* **`tapToClose`**: If true, tapping an open pane will close it
+* **`slideIntent`**: The number of degrees the user must initiate sliding in towards the left or right (see diagram below)
+
+Notes on Slide Intent: The slide intent is an int between 0 and 90, and represents the degrees in the first quadrant of a circle that you would like to have mirrored on the X *and* Y axis. For example, if you have 40 set as your `slideIntent` value, the user would only be able to slide the pane by dragging in the blue area in the diagram below. Once intent has been defined, it will not change until the user releases.
+
+<img src="http://i.imgur.com/uG2CNR8.png">
+
+
 ## Public Methods
 
 ### `open`: Opens the pane to the specified side
