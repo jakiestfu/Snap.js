@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Ratchet template page</title>
+
+		<!-- Sets initial viewport load and disables zooming	-->
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+		<!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!-- Set Apple icons for when prototype is saved to home screen -->
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="touch-icons/apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="touch-icons/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="touch-icons/apple-touch-icon-57x57.png">
+
+		<!-- Include the compiled Ratchet CSS -->
+		<link rel="stylesheet" href="ratchet.css">
+
+		<!-- Include the compiled Ratchet JS -->
+		<script src="ratchet.js"></script>
+
+		<!-- Intro paragraph styles. Delete once you start using this page -->
+		<style type="text/css">
+		
+			/* SNAP.JS STYLES BEGIN */
+			#content{
+				height: 100%;
+				z-index: 4;
+				position: relative;
+			}
+			
+			.drawers{
+				position: absolute;
+				z-index: 3;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+			.drawers .list{margin: 0;}
+			
+			.left-drawer,
+			.right-drawer{
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 265px;
+				bottom: 0;
+				z-index: 1;
+				overflow: auto;
+				-webkit-transition-property: top, bottom;
+				transition-property: top, bottom;
+				-webkit-transition-duration: .2s, .2s;
+				transition-duration: .2s, .2s;
+				-webkit-transition-timing-function: linear, linear;
+				transition-timing-function: linear, linear;
+				-webkit-overflow-scrolling: touch;
+			}
+			.right-drawer{
+				left: auto;
+				right: 0;
+			}
+				
+			.active-drawer{
+				z-index:2;
+				display: block;
+			}
+			/* SNAP.JS STYLES END */
+			
+			.welcome {
+				line-height: 1.5;
+				color: #555;
+			}
+		</style>
+
+	</head>
+	<body>
+	
+	<div class="drawers">
+		<div class="left-drawer" id="left-drawer">
+			<ul class="list">
+			  <li>List item 1</li>
+			  <li>List item 2</li>
+			  <li class="list-divider">List Divider</li>
+			  <li>List item 3</li>
+			  <li>List item 4</li>
+			  <li>List item 5</li>
+			  <li class="list-divider">List Divider</li>
+			  <li>List item 6</li>
+			  <li>List item 7</li>
+			  <li>List item 8</li>
+			  <li>List item 9</li>
+			  <li>List item 10</li>
+			  <li class="list-divider">List Divider</li>
+			  <li>List item 11</li>
+			  <li>List item 12</li>
+			  <li>List item 13</li>
+			  <li class="list-divider">List Divider</li>
+			  <li>List item 14</li>
+			  <li>List item 15</li>
+			</ul>
+		</div>
+		<div class="right-drawer" id="right-drawer">
+			<ul class="list">
+			  <li>List item 1 <span class="chevron"></span></li>
+			  <li>List item 2 <span class="chevron"></span></li>
+			  <li>List item 3 <span class="chevron"></span></li>
+			  <li>List item 4 <span class="chevron"></span></li>
+			  <li>List item 5 <span class="chevron"></span></li>
+			  <li>List item 6 <span class="chevron"></span></li>
+			  <li>List item 7 <span class="chevron"></span></li>
+			  <li>List item 8 <span class="chevron"></span></li>
+			  <li>List item 9 <span class="chevron"></span></li>
+			  <li>List item 10 <span class="chevron"></span></li>
+			  <li>List item 1 <span class="chevron"></span></li>
+			  <li>List item 12 <span class="chevron"></span></li>
+			  <li>List item 13 <span class="chevron"></span></li>
+			  <li>List item 14 <span class="chevron"></span></li>
+			  <li>List item 15 <span class="chevron"></span></li>
+			  <li>List item 16 <span class="chevron"></span></li>
+			  <li>List item 17 <span class="chevron"></span></li>
+			  <li>List item 18 <span class="chevron"></span></li>
+			  <li>List item 19 <span class="chevron"></span></li>
+			  <li>List item 20 <span class="chevron"></span></li>
+			</ul>
+		</div>
+	</div>
+	
+	<div id="content">
+	
+		<!-- Make sure all your bars are the first things in your <body> -->
+		<header class="bar-title">
+			<button class="button" id="toggle-left">Left</button>
+			<h1 class="title">Ratchet</h1>
+			<button class="button" id="toggle-right">Right</button>
+		</header>
+	
+		<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
+		<div class="content">
+			<div class="content-padded">
+				<p class="welcome">Thanks for downloading Ratchet. This is an example HTML page that's linked up to compiled Ratchet CSS and JS, has the proper meta tags and the HTML structure. Need some more help before you start filling this with your own content? Check out some Ratchet resorces:</p>
+			</div>
+	
+			<ul class="list inset">
+				<li>
+					<a href="http://maker.github.com/ratchet/">
+						<strong>Ratchet documentation</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+				<li>
+					<a href="http://www.github.com/maker/ratchet/">
+						<strong>Ratchet on Github</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+				<li>
+					<a href="https://groups.google.com/forum/#!forum/goratchet">
+						<strong>Ratchet Google group</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+				<li>
+					<a href="http://www.twitter.com/GoRatchet">
+						<strong>Ratchet on Twitter</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+				<li>
+					<a href="http://maker.github.com/ratchet/">
+						<strong>Ratchet documentation</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+				<li>
+					<a href="http://www.github.com/maker/ratchet/">
+						<strong>Ratchet on Github</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+				<li>
+					<a href="https://groups.google.com/forum/#!forum/goratchet">
+						<strong>Ratchet Google group</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+				<li>
+					<a href="http://www.twitter.com/GoRatchet">
+						<strong>Ratchet on Twitter</strong>
+						<span class="chevron"></span>
+					</a>
+				</li>
+			</ul>
+	
+		</div>
+	</div>
+	<script type="text/javascript" src="../../../snap.js"></script>
+	<script type="text/javascript">
+	
+		var 
+		
+		// Helper
+		$ = function(id){
+			return document.getElementById(id);
+		},
+		
+		// Instance
+		snapper = new Snap({
+			element: document.getElementById('content')
+		}),
+		
+		// 
+		UpdateDrawers = function(){
+			var state = snapper.state(),
+				towards = state.info.towards,
+				opening = state.info.opening;
+			if(opening=='right' && towards=='left'){
+				$('right-drawer').classList.add('active-drawer');
+				$('left-drawer').classList.remove('active-drawer');
+			} else if(opening=='left' && towards=='right') {
+				$('right-drawer').classList.remove('active-drawer');
+				$('left-drawer').classList.add('active-drawer');
+			}
+		};
+		
+		snapper.on('drag', UpdateDrawers);
+		snapper.on('animating', UpdateDrawers);
+		snapper.on('animated', UpdateDrawers);
+		
+		$('toggle-left').addEventListener('click', function(){
+			snapper.open('left');
+		});
+		
+		$('toggle-right').addEventListener('click', function(){
+			snapper.open('right');
+		});
+		
+	</script>
+	</body>
+</html>
