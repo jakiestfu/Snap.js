@@ -1,7 +1,4 @@
-Snap.js
-=======
-
-Emulates native side-menus in Javascript
+<img src="http://i.imgur.com/NRveBu0.png">
 
 
 ## Usage
