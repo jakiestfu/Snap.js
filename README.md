@@ -5,6 +5,18 @@ A Library for creating beautiful mobile shelfs in Javascript
 
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
+## Features
+* Library Independent
+* High Customization
+* Flick Support
+* User Intent Detection
+* Event Hooks
+* CSS3 Powered Animations
+* Drag Support
+* Programatic API
+* "No-Drag" Elements
+* Definable Easing Mode
+
 ## Usage
 
 ```javascript
