@@ -16,6 +16,7 @@ A Library for creating beautiful mobile shelfs in Javascript
 * Programatic API
 * "No-Drag" Elements
 * Definable Easing Mode
+* Supports Ratchet (with templates!)
 
 ## Usage
 
