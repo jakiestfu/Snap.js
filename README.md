@@ -100,7 +100,8 @@ The data returned from the `state` method will look like the following:
         translation:{
             absolute: 20, // Pixels pane has translated
             relative: 21, // Pixels pane has translated relative to starting translation
-            sinceDirectionChange: 10 // Pixels pane has translated since the direction of the pane has changed
+            sinceDirectionChange: 10, // Pixels pane has translated since the direction of the pane has changed
+            percentage: 40.571649 // The percentage that the Pane is open. Good or animating other things
         }
     }
 } 
