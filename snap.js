@@ -8,7 +8,10 @@
  * Github:  http://github.com/jakiestfu/Snap.js/
  * Version: 1.0
  */
-(function(undefined) {
+ /*jslint browser: true*/
+ /*global define, module, ender*/
+
+(function() {
     'use strict';
     var Snap = Snap || function(userOpts) {
         var settings = {
@@ -31,7 +34,8 @@
                     eventTypes = {
                         down: hasTouch ? 'mousedown' : 'touchstart',
                         move: hasTouch ? 'mousemove' : 'touchmove',
-                        up: hasTouch ? 'mouseup' : 'touchend'
+                        up: hasTouch ? 'mouseup' : 'touchend',
+                        out: hasTouch ? 'mouseout' : 'touchcancel'
                     };
                 return eventTypes[action];
             },
@@ -41,7 +45,8 @@
                 }
             },
             deepExtend: function(destination, source) {
-                for (var property in source) {
+                var property;
+                for (property in source) {
                     if (source[property] && source[property].constructor && source[property].constructor === Object) {
                         destination[property] = destination[property] || {};
                         utils.deepExtend(destination[property], source[property]);
@@ -93,7 +98,7 @@
             translate: {
                 get: {
                     matrix: function(index) {
-                        var matrix = getComputedStyle(settings.element).webkitTransform.match(/\((.*)\)/);
+                        var matrix = window.getComputedStyle(settings.element).webkitTransform.match(/matrix\(([\d ,]*)\)/);
                         if (matrix) {
                             matrix = matrix[1].split(',');
                             return parseInt(matrix[index], 10);
@@ -128,6 +133,7 @@
                     utils.events.addEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
                     utils.events.addEvent(settings.element, utils.eventType('move'), action.drag.dragging);
                     utils.events.addEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
+                    utils.events.addEvent(settings.element, utils.eventType('out'), action.drag.endDrag);
                 },
                 startDrag: function(e) {
                     // No drag on ignored elements
@@ -164,12 +170,12 @@
                 },
                 dragging: function(e) {
                     if (cache.isDragging) {
-                        
+
                         // Does user show intent?
                         if((cache.intentChecked && !cache.hasIntent)){
                             return;
                         }
-                        
+
                         if (cache.hasIntent === false || cache.hasIntent === null) {
                             var deg = utils.angleOfDrag(e.pageX, e.pageY),
                                 inRightRange = (deg >= 0 && deg <= settings.slideIntent) || (deg <= 360 && deg > (360 - settings.slideIntent)),
@@ -181,12 +187,12 @@
                             }
                             cache.intentChecked = true;
                         }
-                        
+
                         // Has user met minimum drag distance?
                         if (settings.minDragDistance>=Math.abs(e.pageX-cache.startDragX)) {
                             return;
                         }
-                        
+
                         utils.dispatchEvent('drag');
                         var pageX = e.pageX,
                             translated = cache.translation,
@@ -319,19 +325,19 @@
                 cache.simpleStates.towards = 'left';
                 action.translate.easeTo(settings.minPosition);
             }
-        },
+        };
         this.close = function() {
             action.translate.easeTo(0);
-        },
+        };
         this.on = function(evt, fn) {
             eventList[evt] = fn;
             return this;
-        },
+        };
         this.off = function(evt) {
             if (eventList[evt]) {
                 eventList[evt] = false;
             }
-        },
+        };
         this.state = function() {
             var state,
             fromLeft = action.translate.get.matrix(4);
@@ -349,13 +355,13 @@
         };
         init(userOpts);
     };
-    if (typeof module !== 'undefined' && module.exports) {
+    if ((typeof module !== 'undefined') && module.exports) {
         module.exports = Snap;
     }
     if (typeof ender === 'undefined') {
         this.Snap = Snap;
     }
-    if (typeof define === "function" && define.amd) {
+    if ((typeof define === "function") && define.amd) {
         define("snap", [], function() {
             return Snap;
         });
