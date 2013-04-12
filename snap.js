@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.2
+ * Version: 1.4
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -168,12 +168,11 @@
                     };
                 },
                 dragging: function(e) {
-                    //_log('Is Dragging?: '+cache.isDragging);
                     if (cache.isDragging) {
                         
                         var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
                             thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY;
-                        //_log('isDragging: '+cache.isDragging+', Time: '+new Date().getTime());
+                        
                         // Does user show intent?
                         if((cache.intentChecked && !cache.hasIntent)){
                             return;
