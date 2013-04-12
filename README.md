@@ -3,6 +3,8 @@ A Library for creating beautiful mobile shelfs in Javascript
 
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank">View Video Preview</a>
 
+<a href="http://jakiestfu.github.io/Snap.js/" target="_blank">View Demo</a>
+
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
 ## Shelf?
