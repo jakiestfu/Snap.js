@@ -8,7 +8,7 @@ A Library for creating beautiful mobile shelfs in Javascript
 ## Shelf?
 This UX idea has been called many things. Shelf, drawer, droor, slider, backpane, side-menu, but I like to call it a shelf.
 
-The idea is a user (on a mobile app, mostly iOS) may slide the actual app to the left or right to reveal a menu that was hidden underneath the app. Snap.js makes it a breaze to interact with your app pane element with dragging and flicking, making it easy for you to recreate what has been popularized by Facebook and Path.
+The idea is a user (on a mobile app, mostly iOS) may slide the actual app to the left or right to reveal a menu that was hidden underneath the app. Snap.js makes it a breeze to interact with your app pane element with dragging and flicking, making it easy for you to recreate what has been popularized by Facebook and Path.
 
 ## Features
 * Library Independent
