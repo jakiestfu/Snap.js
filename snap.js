@@ -6,12 +6,11 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.0
+ * Version: 1.2
  */
- /*jslint browser: true*/
- /*global define, module, ender*/
-
-(function() {
+/*jslint browser: true*/
+/*global define, module, ender*/
+(function(undefined) {
     'use strict';
     var Snap = Snap || function(userOpts) {
         var settings = {
@@ -29,13 +28,13 @@
         cache = {},
         eventList = {},
         utils = {
+            hasTouch: (document.ontouchstart === null),
             eventType: function(action) {
-                var hasTouch = (document.ontouchstart !== null),
-                    eventTypes = {
-                        down: hasTouch ? 'mousedown' : 'touchstart',
-                        move: hasTouch ? 'mousemove' : 'touchmove',
-                        up: hasTouch ? 'mouseup' : 'touchend',
-                        out: hasTouch ? 'mouseout' : 'touchcancel'
+                var eventTypes = {
+                        down: utils.hasTouch ? 'touchstart' : 'mousedown',
+                        move: utils.hasTouch ? 'touchmove' : 'mousemove',
+                        up: utils.hasTouch ? 'touchend' : 'mouseup',
+                        out: utils.hasTouch ? 'touchcancel' : 'mouseout'
                     };
                 return eventTypes[action];
             },
@@ -98,7 +97,7 @@
             translate: {
                 get: {
                     matrix: function(index) {
-                        var matrix = window.getComputedStyle(settings.element).webkitTransform.match(/matrix\(([\d ,]*)\)/);
+                        var matrix = window.getComputedStyle(settings.element).webkitTransform.match(/\((.*)\)/);
                         if (matrix) {
                             matrix = matrix[1].split(',');
                             return parseInt(matrix[index], 10);
@@ -133,11 +132,11 @@
                     utils.events.addEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
                     utils.events.addEvent(settings.element, utils.eventType('move'), action.drag.dragging);
                     utils.events.addEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
-                    utils.events.addEvent(settings.element, utils.eventType('out'), action.drag.endDrag);
                 },
                 startDrag: function(e) {
+                    
                     // No drag on ignored elements
-                    if (e.srcElement.dataset.snapIgnore !== undefined) {
+                    if (e.srcElement.dataset.snapIgnore !== undefined && e.srcElement.dataset.snapIgnore!=='') {
                         utils.dispatchEvent('ignore');
                         return;
                     }
@@ -146,8 +145,8 @@
                     cache.isDragging = true;
                     cache.hasIntent = null;
                     cache.intentChecked = false;
-                    cache.startDragX = e.pageX;
-                    cache.startDragY = e.pageY;
+                    cache.startDragX = utils.hasTouch ? e.touches[0].pageX : e.pageX;
+                    cache.startDragY = utils.hasTouch ? e.touches[0].pageY : e.pageY;
                     cache.dragWatchers = {
                         current: 0,
                         last: 0,
@@ -169,15 +168,19 @@
                     };
                 },
                 dragging: function(e) {
+                    //_log('Is Dragging?: '+cache.isDragging);
                     if (cache.isDragging) {
-
+                        
+                        var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
+                            thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY;
+                        //_log('isDragging: '+cache.isDragging+', Time: '+new Date().getTime());
                         // Does user show intent?
                         if((cache.intentChecked && !cache.hasIntent)){
                             return;
                         }
-
+                        
                         if (cache.hasIntent === false || cache.hasIntent === null) {
-                            var deg = utils.angleOfDrag(e.pageX, e.pageY),
+                            var deg = utils.angleOfDrag(thePageX, thePageY),
                                 inRightRange = (deg >= 0 && deg <= settings.slideIntent) || (deg <= 360 && deg > (360 - settings.slideIntent)),
                                 inLeftRange = (deg >= 180 && deg <= (180 + settings.slideIntent)) || (deg <= 180 && deg >= (180 - settings.slideIntent));
                             if (!inLeftRange && !inRightRange) {
@@ -187,14 +190,14 @@
                             }
                             cache.intentChecked = true;
                         }
-
+                        
                         // Has user met minimum drag distance?
-                        if (settings.minDragDistance>=Math.abs(e.pageX-cache.startDragX)) {
+                        if (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) {
                             return;
                         }
-
+                        e.preventDefault();
                         utils.dispatchEvent('drag');
-                        var pageX = e.pageX,
+                        var pageX = thePageX,
                             translated = cache.translation,
                             absoluteTranslation = action.translate.get.matrix(4),
                             whileDragX = pageX - cache.startDragX,
@@ -301,7 +304,7 @@
                             }
                         }
                         cache.isDragging = false;
-                        cache.startDragX = e.pageX;
+                        cache.startDragX = utils.hasTouch ? e.touches[0].pageX : e.pageX;
                     }
                 }
             }
