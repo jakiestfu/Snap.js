@@ -198,6 +198,15 @@ snapper.on('animated', UpdateDrawers);
 
 An example of this code in action can be found in demo/apps/ratchet/template.html
 
+## Modularity
+
+You may use Require.js to include this script. Exports are supported, too
+
+```javascript
+var Snap = require('snap'),
+    snapper = new Snap();
+```
+
 ## License
 
 Copyright (c) 2013 Jacob Kelley
