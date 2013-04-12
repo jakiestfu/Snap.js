@@ -6,8 +6,10 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.0
+ * Version: 1.4
  */
+/*jslint browser: true*/
+/*global define, module, ender*/
 (function(undefined) {
     'use strict';
     var Snap = Snap || function(userOpts) {
@@ -26,12 +28,13 @@
         cache = {},
         eventList = {},
         utils = {
+            hasTouch: (document.ontouchstart === null),
             eventType: function(action) {
-                var hasTouch = (document.ontouchstart !== null),
-                    eventTypes = {
-                        down: hasTouch ? 'mousedown' : 'touchstart',
-                        move: hasTouch ? 'mousemove' : 'touchmove',
-                        up: hasTouch ? 'mouseup' : 'touchend'
+                var eventTypes = {
+                        down: utils.hasTouch ? 'touchstart' : 'mousedown',
+                        move: utils.hasTouch ? 'touchmove' : 'mousemove',
+                        up: utils.hasTouch ? 'touchend' : 'mouseup',
+                        out: utils.hasTouch ? 'touchcancel' : 'mouseout'
                     };
                 return eventTypes[action];
             },
@@ -41,7 +44,8 @@
                 }
             },
             deepExtend: function(destination, source) {
-                for (var property in source) {
+                var property;
+                for (property in source) {
                     if (source[property] && source[property].constructor && source[property].constructor === Object) {
                         destination[property] = destination[property] || {};
                         utils.deepExtend(destination[property], source[property]);
@@ -93,7 +97,7 @@
             translate: {
                 get: {
                     matrix: function(index) {
-                        var matrix = getComputedStyle(settings.element).webkitTransform.match(/\((.*)\)/);
+                        var matrix = window.getComputedStyle(settings.element).webkitTransform.match(/\((.*)\)/);
                         if (matrix) {
                             matrix = matrix[1].split(',');
                             return parseInt(matrix[index], 10);
@@ -130,8 +134,9 @@
                     utils.events.addEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
                 },
                 startDrag: function(e) {
+                    
                     // No drag on ignored elements
-                    if (e.srcElement.dataset.snapIgnore !== undefined) {
+                    if (e.srcElement.dataset.snapIgnore !== undefined && e.srcElement.dataset.snapIgnore!=='') {
                         utils.dispatchEvent('ignore');
                         return;
                     }
@@ -140,8 +145,8 @@
                     cache.isDragging = true;
                     cache.hasIntent = null;
                     cache.intentChecked = false;
-                    cache.startDragX = e.pageX;
-                    cache.startDragY = e.pageY;
+                    cache.startDragX = utils.hasTouch ? e.touches[0].pageX : e.pageX;
+                    cache.startDragY = utils.hasTouch ? e.touches[0].pageY : e.pageY;
                     cache.dragWatchers = {
                         current: 0,
                         last: 0,
@@ -165,13 +170,16 @@
                 dragging: function(e) {
                     if (cache.isDragging) {
                         
+                        var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
+                            thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY;
+                        
                         // Does user show intent?
                         if((cache.intentChecked && !cache.hasIntent)){
                             return;
                         }
                         
                         if (cache.hasIntent === false || cache.hasIntent === null) {
-                            var deg = utils.angleOfDrag(e.pageX, e.pageY),
+                            var deg = utils.angleOfDrag(thePageX, thePageY),
                                 inRightRange = (deg >= 0 && deg <= settings.slideIntent) || (deg <= 360 && deg > (360 - settings.slideIntent)),
                                 inLeftRange = (deg >= 180 && deg <= (180 + settings.slideIntent)) || (deg <= 180 && deg >= (180 - settings.slideIntent));
                             if (!inLeftRange && !inRightRange) {
@@ -183,12 +191,12 @@
                         }
                         
                         // Has user met minimum drag distance?
-                        if (settings.minDragDistance>=Math.abs(e.pageX-cache.startDragX)) {
+                        if (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) {
                             return;
                         }
-                        
+                        e.preventDefault();
                         utils.dispatchEvent('drag');
-                        var pageX = e.pageX,
+                        var pageX = thePageX,
                             translated = cache.translation,
                             absoluteTranslation = action.translate.get.matrix(4),
                             whileDragX = pageX - cache.startDragX,
@@ -295,7 +303,7 @@
                             }
                         }
                         cache.isDragging = false;
-                        cache.startDragX = e.pageX;
+                        cache.startDragX = utils.hasTouch ? e.touches[0].pageX : e.pageX;
                     }
                 }
             }
@@ -319,19 +327,19 @@
                 cache.simpleStates.towards = 'left';
                 action.translate.easeTo(settings.minPosition);
             }
-        },
+        };
         this.close = function() {
             action.translate.easeTo(0);
-        },
+        };
         this.on = function(evt, fn) {
             eventList[evt] = fn;
             return this;
-        },
+        };
         this.off = function(evt) {
             if (eventList[evt]) {
                 eventList[evt] = false;
             }
-        },
+        };
         this.state = function() {
             var state,
             fromLeft = action.translate.get.matrix(4);
@@ -349,13 +357,13 @@
         };
         init(userOpts);
     };
-    if (typeof module !== 'undefined' && module.exports) {
+    if ((typeof module !== 'undefined') && module.exports) {
         module.exports = Snap;
     }
     if (typeof ender === 'undefined') {
         this.Snap = Snap;
     }
-    if (typeof define === "function" && define.amd) {
+    if ((typeof define === "function") && define.amd) {
         define("snap", [], function() {
             return Snap;
         });
