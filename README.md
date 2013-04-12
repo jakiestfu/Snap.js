@@ -12,6 +12,13 @@ This UX idea has been called many things. Shelf, drawer, droor, slider, backpane
 
 The idea is a user (on a mobile app, mostly iOS) may slide the actual app to the left or right to reveal a menu that was hidden underneath the app. Snap.js makes it a breeze to interact with your app pane element with dragging and flicking, making it easy for you to recreate what has been popularized by Facebook and Path.
 
+## Support
+Snap.js has been tested on the following devices:
+
+* iPhone 5 (Mobile Safari/Chrome)
+* iPhone 4S  (Mobile Safari/Chrome)
+* Galaxy S3
+
 ## Features
 * Library Independent
 * High Customization
