@@ -30,6 +30,8 @@ var snapper = new Snap({
 ```javascript
 settings = {
     element: null,
+    disable: 'none',
+    addBodyClasses: true,
     resistance: 0.5,
     flickThreshold: 50,
     transitionSpeed: 0.3,
@@ -37,12 +39,14 @@ settings = {
     maxPosition: 266,
     minPosition: -266,
     tapToClose: true,
-    minDragDistance: 5,
-    slideIntent: 40
+    slideIntent: 40,
+    minDragDistance: 5
 }
 ```
 
 * **`element`**: The element which the user will be sliding side to side
+* **`disable`**: String, set to 'left' or 'right' to disable the respective side
+* **`addBodyClasses`**: Add classes to the body to signify which side is being opened
 * **`resistance`**: The cooeficcient used to slow sliding when user has passed max or min threshold
 * **`flickThreshold`**: Number of pixels the user needs to swiftly travel to activate a "flick" open
 * **`transitionSpeed`**: The speed at which the pane slides open or closed
