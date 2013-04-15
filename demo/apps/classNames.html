@@ -9,6 +9,7 @@
         <meta name="apple-touch-fullscreen" content="yes">
 
         <link rel="stylesheet" type="text/css" href="../assets/demo.css" />
+
     </head>
     <body>
         <div class="relative tall">
@@ -32,7 +33,7 @@
 							<li><a href="ratchet/template.html">Ratchet</a></li>
 						</ul>
 						<div>
-							<p>Toggles are easy to create. Snap.js gives you the state of the pane and allows you to make decisions simply.</p>
+							<p>The class names demo shows how you can utilize the classess added by Snap.js to adjust hidden content. In this case, we're showing the same menu on both sides of the app via CSS and classess.</p>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non erat ac leo ultrices blandit sed vel risus. Pellentesque facilisis blandit auctor. Maecenas vestibulum vulputate tincidunt. Mauris nec quam libero. Fusce eget ligula non leo varius condimentum quis ac elit. Donec id urna ut neque semper ultrices. Proin ut suscipit felis. Nullam neque felis, ullamcorper scelerisque volutpat vel, vehicula vehicula neque. Aenean scelerisque elit ac erat sagittis ullamcorper.</p>
 						</div>
                 	</div>
@@ -41,14 +42,12 @@
             </div>
 
             
-            <div id="content" class="absolute">
+            <div id="content" class="absolute" style="opacity:0.8;">
                 <div class="relative tall">
                     <div id="toolbar" class="absolute">
                     	<a href="#" id="open-left"></a>
-                    	<span>Toggles</span>
+                    	<span>Class Names</span>
                     </div>
-                    <div class="toggler" id="ol">Open Left</div>
-                    <div class="toggler" id="or">Open Right</div>
                 </div>
             </div>
         </div>
@@ -59,19 +58,9 @@
             var snapper = new Snap({
                 element: document.getElementById('content')
             });
-
-			document.getElementById('ol').addEventListener('click', function(){
-				snapper.open('left');
-			});
-			
-			document.getElementById('or').addEventListener('click', function(){
-				snapper.open('right');
-			});
             
         </script>
         <script type="text/javascript" src="../assets/demo.js"></script>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>		
-    
-		
     </body>
 </html>

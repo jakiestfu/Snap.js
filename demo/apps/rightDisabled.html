@@ -9,6 +9,7 @@
         <meta name="apple-touch-fullscreen" content="yes">
 
         <link rel="stylesheet" type="text/css" href="../assets/demo.css" />
+
     </head>
     <body>
         <div class="relative tall">
@@ -32,7 +33,7 @@
 							<li><a href="ratchet/template.html">Ratchet</a></li>
 						</ul>
 						<div>
-							<p>Toggles are easy to create. Snap.js gives you the state of the pane and allows you to make decisions simply.</p>
+							<p>This demo has the menu on the right side disabled</p>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non erat ac leo ultrices blandit sed vel risus. Pellentesque facilisis blandit auctor. Maecenas vestibulum vulputate tincidunt. Mauris nec quam libero. Fusce eget ligula non leo varius condimentum quis ac elit. Donec id urna ut neque semper ultrices. Proin ut suscipit felis. Nullam neque felis, ullamcorper scelerisque volutpat vel, vehicula vehicula neque. Aenean scelerisque elit ac erat sagittis ullamcorper.</p>
 						</div>
                 	</div>
@@ -45,10 +46,8 @@
                 <div class="relative tall">
                     <div id="toolbar" class="absolute">
                     	<a href="#" id="open-left"></a>
-                    	<span>Toggles</span>
+                    	<span>Right Disabled</span>
                     </div>
-                    <div class="toggler" id="ol">Open Left</div>
-                    <div class="toggler" id="or">Open Right</div>
                 </div>
             </div>
         </div>
@@ -57,21 +56,12 @@
         <script type="text/javascript">
 
             var snapper = new Snap({
-                element: document.getElementById('content')
+                element: document.getElementById('content'),
+                disable: 'right'
             });
-
-			document.getElementById('ol').addEventListener('click', function(){
-				snapper.open('left');
-			});
-			
-			document.getElementById('or').addEventListener('click', function(){
-				snapper.open('right');
-			});
             
         </script>
         <script type="text/javascript" src="../assets/demo.js"></script>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>		
-    
-		
     </body>
 </html>
