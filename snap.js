@@ -152,7 +152,7 @@
                 startDrag: function(e) {
                     
                     // No drag on ignored elements
-                    if (e.srcElement.dataset.snapIgnore !== undefined) {
+                    if (e.srcElement.dataset.snapIgnore == "true") {
                         utils.dispatchEvent('ignore');
                         return;
                     }
