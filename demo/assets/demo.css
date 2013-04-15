@@ -1,1 +1,20 @@
-html, body{    height: 100%;    overflow: hidden;}body{    margin: 0;    padding: 0;    font-family: sans-serif;}.tall{ height: 100%; }.relative{ position: relative; }.absolute{ position: absolute; }.left{ float: left; }.right{ float: right;}#toolbar{    height: 44px;    top: 0;    left: 0;    right: 0;    background: #536ea7;    border-bottom: 1px solid #111b32;}#content{    background: #BFC7D8;    top: 0;    left: 0;    right: 0;    bottom: 0;    -webkit-transform: translate3d(0, 0, 0);}.drawers{    background: #323949;    top: 0;    left: 0;    right: 0;    bottom: 0;}.left-drawer,.right-drawer{    top: 0;    left: 0;    width: 265px;    bottom: 0;    background: #323949;}.right-drawer{    left: auto;    right: 0;}#no-drag{    position: absolute;    top:50%;    left: 50%;    width: 50%;    height: 100px;    margin-left: -25%;    margin-top: -50px;    background: red;    color: #FFF;	text-align: center;	line-height: 100px;}.toggler{	width: 80%;	background: rgba(255,255,255,0.5);	margin: 0 auto;	position: relative;	top: 70px;	padding: 20px;	margin-bottom: 20px;	text-align: center;}
+html, body {
+	height: 100%;	overflow: hidden;}body {
+	margin: 0;	padding: 0;	font-family: sans-serif;}.tall {	height: 100%;}.relative {	position: relative;}.absolute {	position: absolute;}.left {	float: left;}.right {	float: right;}#toolbar {
+	height: 44px;	top: 0;	left: 0;	right: 0;	background: #536ea7;	border-bottom: 1px solid #111b32;}#toolbar span {
+	position: absolute;	top: 0;	left: 0;	right: 0;	height: 21px;	text-align: center;	line-height: 45px;	color: #FFF;	font-weight: bold;	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1);}#content {
+	background: #BFC7D8 url(drag.png) center 75% no-repeat;	top: 0;	left: 0;	right: 0;	bottom: 0;	z-index: 3;	-webkit-transform: translate3d(0, 0, 0);}.drawers {
+	background: #323949;	top: 0;	left: 0;	right: 0;	bottom: 0;}.left-drawer, .right-drawer {
+	top: 0;	left: 0;	width: 265px;	bottom: 0;	background: #323949;	color: #eee;	overflow: auto;	-webkit-transition-property: top, bottom;	transition-property: top, bottom;	-webkit-transition-duration: .2s, .2s;	transition-duration: .2s, .2s;	-webkit-transition-timing-function: linear, linear;	transition-timing-function: linear, linear;	-webkit-overflow-scrolling: touch;}.left-drawer {
+	z-index: 2;}.right-drawer {
+	left: auto;	right: 0;	z-index: 1;}.drawers h3 {
+	font-size: 36px;	font-weight: normal;	margin: 15px;}.demo-social {
+	padding: 0 15px;}.drawers h4 {
+	padding: 15px;	border-top: 1px solid rgba(255, 255, 255, 0.1);	margin-bottom: 0;}.drawers ul {
+	padding: 0;	margin: 0;	list-style-type: none;}.drawers ul li a {
+	display: block;	border-bottom: 1px solid rgba(0,0,0, 0.1);	border-top: 1px solid rgba(255, 255, 255, 0.1);	padding: 15px;	font-weight: bold;	text-shadow: 0 1px 0 #000;	text-decoration: none;	color: #ccc;	text-indent: 20px;}.drawers p {
+	opacity: 0.5;	padding: 15px;	font-size: 12px;}.snapjs-right .left-drawer {
+	left: auto;	right: 0;}#open-left {
+	background: url(open.png) center center no-repeat;	display: block;	width: 44px;	height: 44px;}#no-drag {
+	position: absolute;	top: 50%;	left: 50%;	width: 50%;	height: 100px;	margin-left: -25%;	margin-top: -50px;	background: red;	color: #FFF;	text-align: center;	line-height: 100px;}.toggler {
+	width: 80%;	background: rgba(255,255,255,0.5);	margin: 0 auto;	position: relative;	top: 70px;	padding: 20px;	margin-bottom: 20px;	text-align: center;}

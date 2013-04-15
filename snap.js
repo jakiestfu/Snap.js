@@ -6,15 +6,17 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.4
+ * Version: 1.5.0
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
-(function(undefined) {
+(function(win, doc) {
     'use strict';
     var Snap = Snap || function(userOpts) {
         var settings = {
             element: null,
+            disable: 'none',
+            addBodyClasses: true,
             resistance: 0.5,
             flickThreshold: 50,
             transitionSpeed: 0.3,
@@ -25,10 +27,24 @@
             slideIntent: 40, // degrees
             minDragDistance: 5
         },
-        cache = {},
+        cache = {
+            simpleStates: {
+                opening: null,
+                towards: null,
+                hyperExtending: null,
+                halfway: null,
+                flick: null,
+                translation: {
+                    absolute: 0,
+                    relative: 0,
+                    sinceDirectionChange: 0,
+                    percentage: 0
+                }
+            }
+        },
         eventList = {},
         utils = {
-            hasTouch: (document.ontouchstart === null),
+            hasTouch: (doc.ontouchstart === null),
             eventType: function(action) {
                 var eventTypes = {
                         down: utils.hasTouch ? 'touchstart' : 'mousedown',
@@ -97,7 +113,7 @@
             translate: {
                 get: {
                     matrix: function(index) {
-                        var matrix = window.getComputedStyle(settings.element).webkitTransform.match(/\((.*)\)/);
+                        var matrix = win.getComputedStyle(settings.element).webkitTransform.match(/\((.*)\)/);
                         if (matrix) {
                             matrix = matrix[1].split(',');
                             return parseInt(matrix[index], 10);
@@ -136,7 +152,7 @@
                 startDrag: function(e) {
                     
                     // No drag on ignored elements
-                    if (e.srcElement.dataset.snapIgnore !== undefined && e.srcElement.dataset.snapIgnore!=='') {
+                    if (e.srcElement.dataset.snapIgnore !== undefined) {
                         utils.dispatchEvent('ignore');
                         return;
                     }
@@ -171,11 +187,29 @@
                     if (cache.isDragging) {
                         
                         var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
-                            thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY;
+                            thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY,
+                            translated = cache.translation,
+                            absoluteTranslation = action.translate.get.matrix(4),
+                            whileDragX = thePageX - cache.startDragX,
+                            openingLeft = absoluteTranslation > 0,
+                            translateTo = whileDragX,
+                            diff;
                         
-                        // Does user show intent?
-                        if((cache.intentChecked && !cache.hasIntent)){
+                        if( (cache.intentChecked && !cache.hasIntent) || // Does user show intent?
+                            (thePageX-cache.startDragX)>0 && (settings.disable=='left') || // Left pane Disabled?
+                            (thePageX-cache.startDragX)<0 && (settings.disable=='right') // Right pane Disabled?
+                        ){
                             return;
+                        }
+                        
+                        if(settings.addBodyClasses){
+                            if((absoluteTranslation)>0){
+                                doc.body.classList.add('snapjs-left');
+                                doc.body.classList.remove('snapjs-right');
+                            } else if((absoluteTranslation)<0){
+                                doc.body.classList.add('snapjs-right');
+                                doc.body.classList.remove('snapjs-left');
+                            }
                         }
                         
                         if (cache.hasIntent === false || cache.hasIntent === null) {
@@ -190,33 +224,30 @@
                             cache.intentChecked = true;
                         }
                         
-                        // Has user met minimum drag distance?
-                        if (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) {
+                        if ( 
+                            (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) && // Has user met minimum drag distance?
+                            (cache.hasIntent === false)
+                        ) {
                             return;
                         }
+                        
                         e.preventDefault();
                         utils.dispatchEvent('drag');
-                        var pageX = thePageX,
-                            translated = cache.translation,
-                            absoluteTranslation = action.translate.get.matrix(4),
-                            whileDragX = pageX - cache.startDragX,
-                            openingLeft = absoluteTranslation > 0,
-                            translateTo = whileDragX,
-                            diff;
-                        cache.dragWatchers.current = pageX;
+                        
+                        cache.dragWatchers.current = thePageX;
                         // Determine which direction we are going
-                        if (cache.dragWatchers.last > pageX) {
+                        if (cache.dragWatchers.last > thePageX) {
                             if (cache.dragWatchers.state !== 'left') {
                                 cache.dragWatchers.state = 'left';
-                                cache.dragWatchers.hold = pageX;
+                                cache.dragWatchers.hold = thePageX;
                             }
-                            cache.dragWatchers.last = pageX;
-                        } else if (cache.dragWatchers.last < pageX) {
+                            cache.dragWatchers.last = thePageX;
+                        } else if (cache.dragWatchers.last < thePageX) {
                             if (cache.dragWatchers.state !== 'right') {
                                 cache.dragWatchers.state = 'right';
-                                cache.dragWatchers.hold = pageX;
+                                cache.dragWatchers.hold = thePageX;
                             }
-                            cache.dragWatchers.last = pageX;
+                            cache.dragWatchers.last = thePageX;
                         }
                         if (openingLeft) {
                             // Pulling too far to the right
@@ -321,10 +352,14 @@
             if (side === 'left') {
                 cache.simpleStates.opening = 'left';
                 cache.simpleStates.towards = 'right';
+                doc.body.classList.add('snapjs-left');
+                doc.body.classList.remove('snapjs-right');
                 action.translate.easeTo(settings.maxPosition);
             } else if (side === 'right') {
                 cache.simpleStates.opening = 'right';
                 cache.simpleStates.towards = 'left';
+                doc.body.classList.add('snapjs-right');
+                doc.body.classList.remove('snapjs-left');
                 action.translate.easeTo(settings.minPosition);
             }
         };
@@ -342,7 +377,7 @@
         };
         this.state = function() {
             var state,
-            fromLeft = action.translate.get.matrix(4);
+                fromLeft = action.translate.get.matrix(4);
             if (fromLeft === settings.maxPosition) {
                 state = 'left';
             } else if (fromLeft === settings.minPosition) {
@@ -368,4 +403,4 @@
             return Snap;
         });
     }
-}).call(this);
+}).call(this, window, document);
