@@ -181,8 +181,8 @@ Some CSS is required to get some smooth ass scrolling. Utilize the CSS below to 
 }
 ```
 
-### Z-Indexes and Display
-Because of the nature of this code, drawers are just kind of stacked behind the content. To bring the proper drawer to the fron, you can hook into Snaps event system:
+### Z-Indeces and Display
+Because of the nature of this code, drawers are just kind of stacked behind the content. To bring the proper drawer to the front, you can hook into Snaps event system:
 
 ```javascript
 var UpdateDrawers = function(){
@@ -204,3 +204,15 @@ snapper.on('animated', UpdateDrawers);
 ```
 
 An example of this code in action can be found in demo/apps/ratchet/template.html
+
+
+### Z-Indeces and Display *UPDATED*
+Since having expanded upon this library, there is now a much simpler way to hook thisd functionality with just CSS.
+
+With `addBodyClasses` set to `true` in your initialize options, one of the two classess will be added to the body tag: `.snapjs-left` or `.snapjs-right`, depending on which pane is being open, respectively. This being said, you can apply your CSS like the following:
+
+```css
+.left-drawer{ z-index: 3; }
+.right-drawer{ z-index: 2; } // Right drawer element appears underneath the left drawer, 
+.snapjs-right .right-drawer{ z-index: 4; } // but when the right drawer is being opened, we can set its z-index higher than the left drawer
+```
