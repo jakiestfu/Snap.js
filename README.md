@@ -130,6 +130,21 @@ The data returned from the `state` method will look like the following:
 } 
 ```
 
+### Toggles
+With the provided API, Toggles can be done like the following:
+
+```javascript
+myToggleButton.addEventListener('click', function(){
+
+    if( snapper.state().state=="left" ){
+        snapper.close();
+    } else {
+        snapper.open('left');
+    }
+
+});
+```
+
 ## Gotchas
 
 ### Layout
