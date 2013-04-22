@@ -149,6 +149,11 @@
                     utils.events.addEvent(settings.element, utils.eventType('move'), action.drag.dragging);
                     utils.events.addEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
                 },
+                stopListening: function() {
+                    utils.events.removeEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
+                    utils.events.removeEvent(settings.element, utils.eventType('move'), action.drag.dragging);
+                    utils.events.removeEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
+                },
                 startDrag: function(e) {
                     
                     // No drag on ignored elements
@@ -374,6 +379,12 @@
             if (eventList[evt]) {
                 eventList[evt] = false;
             }
+        };
+        this.enable = function() {
+            action.drag.listen();
+        };
+        this.disable = function() {
+            action.drag.stopListening();
         };
         this.state = function() {
             var state,
