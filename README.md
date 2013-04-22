@@ -80,6 +80,18 @@ snapper.open('right');
 snapper.close();
 ```
 
+### `disable`: Disables sliding events
+
+```javascript
+snapper.disable();
+```
+
+### `enable`: Enables sliding events after disabling
+
+```javascript
+snapper.enable();
+```
+
 ### `on`: Adds an event hook
 
 ```javascript
