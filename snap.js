@@ -229,7 +229,7 @@
                             cache.intentChecked = true;
                         }
                         
-                        if (
+                        if ( 
                             (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) && // Has user met minimum drag distance?
                             (cache.hasIntent === false)
                         ) {
