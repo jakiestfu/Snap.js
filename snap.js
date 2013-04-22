@@ -149,8 +149,13 @@
                     utils.events.addEvent(settings.element, utils.eventType('move'), action.drag.dragging);
                     utils.events.addEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
                 },
+                stopListening: function() {
+                    utils.events.removeEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
+                    utils.events.removeEvent(settings.element, utils.eventType('move'), action.drag.dragging);
+                    utils.events.removeEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
+                },
                 startDrag: function(e) {
-                    
+
                     // No drag on ignored elements
                     if (e.srcElement.dataset.snapIgnore == "true") {
                         utils.dispatchEvent('ignore');
@@ -185,7 +190,7 @@
                 },
                 dragging: function(e) {
                     if (cache.isDragging) {
-                        
+
                         var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
                             thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY,
                             translated = cache.translation,
@@ -194,14 +199,14 @@
                             openingLeft = absoluteTranslation > 0,
                             translateTo = whileDragX,
                             diff;
-                        
+
                         if( (cache.intentChecked && !cache.hasIntent) || // Does user show intent?
                             (thePageX-cache.startDragX)>0 && (settings.disable=='left') || // Left pane Disabled?
                             (thePageX-cache.startDragX)<0 && (settings.disable=='right') // Right pane Disabled?
                         ){
                             return;
                         }
-                        
+
                         if(settings.addBodyClasses){
                             if((absoluteTranslation)>0){
                                 doc.body.classList.add('snapjs-left');
@@ -211,7 +216,7 @@
                                 doc.body.classList.remove('snapjs-left');
                             }
                         }
-                        
+
                         if (cache.hasIntent === false || cache.hasIntent === null) {
                             var deg = utils.angleOfDrag(thePageX, thePageY),
                                 inRightRange = (deg >= 0 && deg <= settings.slideIntent) || (deg <= 360 && deg > (360 - settings.slideIntent)),
@@ -223,17 +228,17 @@
                             }
                             cache.intentChecked = true;
                         }
-                        
-                        if ( 
+
+                        if (
                             (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) && // Has user met minimum drag distance?
                             (cache.hasIntent === false)
                         ) {
                             return;
                         }
-                        
+
                         e.preventDefault();
                         utils.dispatchEvent('drag');
-                        
+
                         cache.dragWatchers.current = thePageX;
                         // Determine which direction we are going
                         if (cache.dragWatchers.last > thePageX) {
@@ -374,6 +379,12 @@
             if (eventList[evt]) {
                 eventList[evt] = false;
             }
+        };
+        this.enable = function() {
+            action.drag.listen();
+        };
+        this.disable = function() {
+            action.drag.stopListening();
         };
         this.state = function() {
             var state,
