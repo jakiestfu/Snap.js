@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.5.0
+ * Version: 1.5.2
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -157,7 +157,7 @@
                 startDrag: function(e) {
                     
                     // No drag on ignored elements
-                    if (e.srcElement.dataset.snapIgnore == "true") {
+                    if (e.srcElement.dataset.snapIgnore === "true") {
                         utils.dispatchEvent('ignore');
                         return;
                     }
@@ -201,8 +201,8 @@
                             diff;
                         
                         if( (cache.intentChecked && !cache.hasIntent) || // Does user show intent?
-                            (thePageX-cache.startDragX)>0 && (settings.disable=='left') || // Left pane Disabled?
-                            (thePageX-cache.startDragX)<0 && (settings.disable=='right') // Right pane Disabled?
+                            (thePageX-cache.startDragX)>0 && (settings.disable==='left') || // Left pane Disabled?
+                            (thePageX-cache.startDragX)<0 && (settings.disable==='right') // Right pane Disabled?
                         ){
                             return;
                         }
