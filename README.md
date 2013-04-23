@@ -8,6 +8,7 @@ A Library for creating beautiful mobile shelfs in Javascript
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
 ## Features
+* Firefox 10+, Wide Webkit Support
 * Library Independent
 * High Customization
 * Flick Support
@@ -78,6 +79,14 @@ snapper.open('right');
 
 ```javascript
 snapper.close();
+```
+
+### `expose`: Opens the pane entirely
+
+```javascript
+snapper.expose('left');
+// OR
+snapper.expose('right');
 ```
 
 ### `disable`: Disables sliding events
@@ -182,14 +191,14 @@ A sample layout is found in demo/apps/default.html.
 Some CSS is required to get some smooth ass scrolling. Utilize the CSS below to apply this to any of your elements:
 ```css
 .scrollable{
-	overflow: auto;
-	-webkit-transition-property: top, bottom;
-	transition-property: top, bottom;
-	-webkit-transition-duration: .2s, .2s;
-	transition-duration: .2s, .2s;
-	-webkit-transition-timing-function: linear, linear;
-	transition-timing-function: linear, linear;
-	-webkit-overflow-scrolling: touch;
+    overflow: auto;
+    -webkit-transition-property: top, bottom;
+    transition-property: top, bottom;
+    -webkit-transition-duration: .2s, .2s;
+    transition-duration: .2s, .2s;
+    -webkit-transition-timing-function: linear, linear;
+    transition-timing-function: linear, linear;
+    -webkit-overflow-scrolling: touch;
 }
 ```
 
@@ -199,14 +208,14 @@ Because of the nature of this code, drawers are just kind of stacked behind the 
 ```javascript
 var UpdateDrawers = function(){
   var state = snapper.state(),
-		towards = state.info.towards,
-		opening = state.info.opening;
-	if(opening=='right' && towards=='left'){
-		// Revealing Right Drawer, apply CSS to that droor to bring it to the front.
+        towards = state.info.towards,
+        opening = state.info.opening;
+    if(opening=='right' && towards=='left'){
+        // Revealing Right Drawer, apply CSS to that droor to bring it to the front.
     // Usually, display:block works if you set all panes to display:none;
-	} else if(opening=='left' && towards=='right') {
-		// Revealing left Drawer
-	}
+    } else if(opening=='left' && towards=='right') {
+        // Revealing left Drawer
+    }
 };
 
 // Bind Events
