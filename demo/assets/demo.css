@@ -18,3 +18,57 @@ html, body {
 	background: url(open.png) center center no-repeat;	display: block;	width: 44px;	height: 44px;}#no-drag {
 	position: absolute;	top: 50%;	left: 50%;	width: 50%;	height: 100px;	margin-left: -25%;	margin-top: -50px;	background: red;	color: #FFF;	text-align: center;	line-height: 100px;}.toggler {
 	width: 80%;	background: rgba(255,255,255,0.5);	margin: 0 auto;	position: relative;	top: 70px;	padding: 20px;	margin-bottom: 20px;	text-align: center;}
+.search{
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+	-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+	}
+#search{
+	height: 30px;
+	width: 87%;
+	margin: 7px 7px 0 7px;
+	
+	background: linear-gradient(#414A5A,#4C5464);
+	background: -webkit-linear-gradient(#414A5A,#4C5464);
+	
+	padding-left: 15px;
+	
+	border: 1px solid #222936;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	border-radius: 25px;
+	-webkit-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
+	-moz-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
+	box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
+	-webkit-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
+	-moz-box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
+	box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
+	}
+	#search:focus{
+		outline: none;
+		border-color: #151515;
+	}
+
+.left-drawer,
+.right-drawer{
+	-webkit-transition: width 0.3s ease; 
+	-moz-transition: width 0.3s ease; 
+	-o-transition: width 0.3s ease; 
+	transition: width 0.3s ease; 
+}
+.drawer-inner{
+	-webkit-transition: opacity 0.3s ease; 
+	-moz-transition: opacity 0.3s ease; 
+	-o-transition: opacity 0.3s ease; 
+	transition: opacity 0.3s ease; 
+	}
+.snapjs-expand-left .drawer-inner,
+.snapjs-expand-right .drawer-inner{
+	opacity: 0;
+	}
+.snapjs-expand-left .left-drawer,
+.snapjs-expand-right .right-drawer{
+	width: 100%;
+	}

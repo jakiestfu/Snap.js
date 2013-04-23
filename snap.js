@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.5.2
+ * Version: 1.6.0
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -57,6 +57,16 @@
             dispatchEvent: function(type) {
                 if (typeof eventList[type] === 'function') {
                     eventList[type].call();
+                }
+            },
+            vendor: function(){
+                var tmp = document.createElement("div"),
+                    prefixes = 'webkit Moz O ms'.split(' '),
+                    i;
+                for (i in prefixes) {
+                    if (typeof tmp.style[prefixes[i] + 'Transition'] != 'undefined') {
+                        return prefixes[i];
+                    }
                 }
             },
             deepExtend: function(destination, source) {
@@ -113,7 +123,7 @@
             translate: {
                 get: {
                     matrix: function(index) {
-                        var matrix = win.getComputedStyle(settings.element).webkitTransform.match(/\((.*)\)/);
+                        var matrix = win.getComputedStyle(settings.element)[cache.vendor+'Transform'].match(/\((.*)\)/);
                         if (matrix) {
                             matrix = matrix[1].split(',');
                             return parseInt(matrix[index], 10);
@@ -123,12 +133,14 @@
                 },
                 easeTo: function(n) {
                     cache.easing = true;
-                    settings.element.style.webkitTransition = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
-                    var animatingInterval = setInterval(function() {
-                        utils.dispatchEvent('animating');
-                    }, 1);
-                    utils.events.addEvent(settings.element, 'webkitTransitionEnd', function() {
-                        settings.element.style.webkitTransition = '';
+                    settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
+                    var transitionCallback = cache.vendor==='Moz' ? 'transitionend' : cache.vendor+'TransitionEnd',
+                        animatingInterval = setInterval(function() {
+                            utils.dispatchEvent('animating');
+                        }, 1);
+                    
+                    utils.events.addEvent(settings.element, transitionCallback, function() {
+                        settings.element.style[cache.vendor+'Transition'] = '';
                         cache.translation = action.translate.get.matrix(4);
                         cache.easing = false;
                         clearInterval(animatingInterval);
@@ -138,7 +150,7 @@
                 },
                 x: function(n) {
                     var theTranslate = 'translate3d(' + parseInt(n, 10) + 'px, 0,0)';
-                    settings.element.style.webkitTransform = theTranslate;
+                    settings.element.style[cache.vendor+'Transform'] = theTranslate;
                 }
             },
             drag: {
@@ -157,12 +169,13 @@
                 startDrag: function(e) {
                     
                     // No drag on ignored elements
-                    if (e.srcElement.dataset.snapIgnore === "true") {
+                    var src = e.target ? e.target : e.srcElement;
+                    if (src.dataset && src.dataset.snapIgnore === "true") {
                         utils.dispatchEvent('ignore');
                         return;
                     }
                     utils.dispatchEvent('start');
-                    settings.element.style.webkitTransition = '';
+                    settings.element.style[cache.vendor+'Transition'] = '';
                     cache.isDragging = true;
                     cache.hasIntent = null;
                     cache.intentChecked = false;
@@ -236,7 +249,7 @@
                             return;
                         }
                         
-                        e.preventDefault();
+                        utils.events.preventDefaultEvent(e);
                         utils.dispatchEvent('drag');
                         
                         cache.dragWatchers.current = thePageX;
@@ -302,6 +315,7 @@
                         var translated = action.translate.get.matrix(4);
                         // Tap Close
                         if (cache.dragWatchers.current === 0 && translated !== 0 && settings.tapToClose) {
+                            utils.events.preventDefaultEvent(e);
                             action.translate.easeTo(0);
                             cache.isDragging = false;
                             cache.startDragX = 0;
@@ -347,13 +361,18 @@
         init = function(opts) {
             if (opts.element) {
                 utils.deepExtend(settings, opts);
-                action.drag.listen();
+                cache.vendor = utils.vendor();
+                if(typeof cache.vendor!='undefined'){
+                    action.drag.listen();
+                }
             }
         };
         /*
          * Public
          */
         this.open = function(side) {
+            doc.body.classList.remove('snapjs-expand-left');
+            doc.body.classList.remove('snapjs-expand-right');
             if (side === 'left') {
                 cache.simpleStates.opening = 'left';
                 cache.simpleStates.towards = 'right';
@@ -371,6 +390,20 @@
         this.close = function() {
             action.translate.easeTo(0);
         };
+        this.expand = function(side){
+            var to = win.innerWidth;
+            
+            if(side=='left'){
+                doc.body.classList.add('snapjs-expand-left');
+                doc.body.classList.remove('snapjs-expand-right');
+            } else {
+                doc.body.classList.add('snapjs-expand-right');
+                doc.body.classList.remove('snapjs-expand-left');
+                to *= -1;
+            }
+            action.translate.easeTo(to);
+        };
+        
         this.on = function(evt, fn) {
             eventList[evt] = fn;
             return this;
