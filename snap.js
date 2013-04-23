@@ -214,8 +214,8 @@
                             diff;
                         
                         if( (cache.intentChecked && !cache.hasIntent) || // Does user show intent?
-                            (thePageX-cache.startDragX)>0 && (settings.disable==='left') || // Left pane Disabled?
-                            (thePageX-cache.startDragX)<0 && (settings.disable==='right') // Right pane Disabled?
+                            ((translated!=settings.minPosition) && (thePageX-cache.startDragX)>0 && (settings.disable==='left')) || // Left pane Disabled?
+                            ((translated!=settings.maxPosition) && (thePageX-cache.startDragX)<0 && (settings.disable==='right')) // Right pane Disabled?
                         ){
                             return;
                         }
