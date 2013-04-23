@@ -228,3 +228,7 @@ With `addBodyClasses` set to `true` in your initialize options, one of the two c
 .right-drawer{ z-index: 2; } // Right drawer element appears underneath the left drawer, 
 .snapjs-right .right-drawer{ z-index: 4; } // but when the right drawer is being opened, we can set its z-index higher than the left drawer
 ```
+
+## Licensing
+
+MIT, dawg
