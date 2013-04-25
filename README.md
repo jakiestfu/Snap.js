@@ -8,7 +8,7 @@ A Library for creating beautiful mobile shelfs in Javascript
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
 ## Features
-* Firefox 10+, Wide Webkit Support
+* Firefox 10+, Wide Webkit Support (Android WebKit 2.3.X+)
 * Library Independent
 * High Customization
 * Flick Support
@@ -19,7 +19,9 @@ A Library for creating beautiful mobile shelfs in Javascript
 * Programatic API
 * "No-Drag" Elements
 * Definable Easing Mode
-* Supports Ratchet (with templates!)
+* Enable/Disable Events
+* Disabled Sides (left or right)
+* Supports [Ratchet](http://maker.github.com/ratchet/) (with templates!)
 
 ## Usage
 
