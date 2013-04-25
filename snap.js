@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.6.0
+ * Version: 1.6.1
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -54,17 +54,30 @@
                     };
                 return eventTypes[action];
             },
+            klass: {
+                has: function(el, name){
+                    return (el.className).indexOf(name) !== -1;
+                },
+                add: function(el, name){
+                    if(!utils.klass.has(el, name)){
+                        el.className += " "+name;
+                    }
+                },
+                remove: function(el, name){
+                    el.className = (el.className).replace(" "+name, '');
+                }
+            },
             dispatchEvent: function(type) {
                 if (typeof eventList[type] === 'function') {
                     eventList[type].call();
                 }
             },
             vendor: function(){
-                var tmp = document.createElement("div"),
+                var tmp = doc.createElement("div"),
                     prefixes = 'webkit Moz O ms'.split(' '),
                     i;
                 for (i in prefixes) {
-                    if (typeof tmp.style[prefixes[i] + 'Transition'] != 'undefined') {
+                    if (typeof tmp.style[prefixes[i] + 'Transition'] !== 'undefined') {
                         return prefixes[i];
                     }
                 }
@@ -214,19 +227,19 @@
                             diff;
                         
                         if( (cache.intentChecked && !cache.hasIntent) || // Does user show intent?
-                            (thePageX-cache.startDragX)>0 && (settings.disable==='left') || // Left pane Disabled?
-                            (thePageX-cache.startDragX)<0 && (settings.disable==='right') // Right pane Disabled?
+                            ((translated!==settings.minPosition) && (thePageX-cache.startDragX)>0 && (settings.disable==='left')) || // Left pane Disabled?
+                            ((translated!==settings.maxPosition) && (thePageX-cache.startDragX)<0 && (settings.disable==='right')) // Right pane Disabled?
                         ){
                             return;
                         }
                         
                         if(settings.addBodyClasses){
                             if((absoluteTranslation)>0){
-                                doc.body.classList.add('snapjs-left');
-                                doc.body.classList.remove('snapjs-right');
+                                utils.klass.add(doc.body, 'snapjs-left');
+                                utils.klass.remove(doc.body, 'snapjs-right');
                             } else if((absoluteTranslation)<0){
-                                doc.body.classList.add('snapjs-right');
-                                doc.body.classList.remove('snapjs-left');
+                                utils.klass.add(doc.body, 'snapjs-right');
+                                utils.klass.remove(doc.body, 'snapjs-left');
                             }
                         }
                         
@@ -362,7 +375,7 @@
             if (opts.element) {
                 utils.deepExtend(settings, opts);
                 cache.vendor = utils.vendor();
-                if(typeof cache.vendor!='undefined'){
+                if(typeof cache.vendor!=='undefined'){
                     action.drag.listen();
                 }
             }
@@ -371,19 +384,21 @@
          * Public
          */
         this.open = function(side) {
-            doc.body.classList.remove('snapjs-expand-left');
-            doc.body.classList.remove('snapjs-expand-right');
+        
+            utils.klass.remove(doc.body, 'snapjs-expand-left');
+            utils.klass.remove(doc.body, 'snapjs-expand-right');
+
             if (side === 'left') {
                 cache.simpleStates.opening = 'left';
                 cache.simpleStates.towards = 'right';
-                doc.body.classList.add('snapjs-left');
-                doc.body.classList.remove('snapjs-right');
+                utils.klass.add(doc.body, 'snapjs-left');
+                utils.klass.remove(doc.body, 'snapjs-right');
                 action.translate.easeTo(settings.maxPosition);
             } else if (side === 'right') {
                 cache.simpleStates.opening = 'right';
                 cache.simpleStates.towards = 'left';
-                doc.body.classList.add('snapjs-right');
-                doc.body.classList.remove('snapjs-left');
+                utils.klass.remove(doc.body, 'snapjs-left');
+                utils.klass.add(doc.body, 'snapjs-right');
                 action.translate.easeTo(settings.minPosition);
             }
         };
@@ -393,12 +408,12 @@
         this.expand = function(side){
             var to = win.innerWidth;
             
-            if(side=='left'){
-                doc.body.classList.add('snapjs-expand-left');
-                doc.body.classList.remove('snapjs-expand-right');
+            if(side==='left'){
+                utils.klass.add(doc.body, 'snapjs-expand-left');
+                utils.klass.remove(doc.body, 'snapjs-expand-right');
             } else {
-                doc.body.classList.add('snapjs-expand-right');
-                doc.body.classList.remove('snapjs-expand-left');
+                utils.klass.add(doc.body, 'snapjs-expand-right');
+                utils.klass.remove(doc.body, 'snapjs-expand-left');
                 to *= -1;
             }
             action.translate.easeTo(to);
