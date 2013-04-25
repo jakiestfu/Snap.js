@@ -24,6 +24,7 @@
             maxPosition: 266,
             minPosition: -266,
             tapToClose: true,
+            touchToDrag: true,
             slideIntent: 40, // degrees
             minDragDistance: 5
         },
@@ -168,6 +169,10 @@
             },
             drag: {
                 listen: function() {
+                    if(!settings.touchToDrag){
+                      return
+                    }
+
                     cache.translation = 0;
                     cache.easing = false;
                     utils.events.addEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
@@ -180,7 +185,7 @@
                     utils.events.removeEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
                 },
                 startDrag: function(e) {
-                    
+
                     // No drag on ignored elements
                     var src = e.target ? e.target : e.srcElement;
                     if (src.dataset && src.dataset.snapIgnore === "true") {
