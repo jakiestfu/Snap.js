@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.6.1
+ * Version: 1.6.4
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -24,6 +24,7 @@
             maxPosition: 266,
             minPosition: -266,
             tapToClose: true,
+            touchToDrag: true,
             slideIntent: 40, // degrees
             minDragDistance: 5
         },
@@ -162,6 +163,10 @@
                     action.translate.x(n);
                 },
                 x: function(n) {
+                    if( (settings.disable=='left' && n>0) ||
+                		(settings.disable=='right' && n<0)
+                	){ return; }
+                	
                     var theTranslate = 'translate3d(' + parseInt(n, 10) + 'px, 0,0)';
                     settings.element.style[cache.vendor+'Transform'] = theTranslate;
                 }
@@ -180,7 +185,7 @@
                     utils.events.removeEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
                 },
                 startDrag: function(e) {
-                    
+
                     // No drag on ignored elements
                     var src = e.target ? e.target : e.srcElement;
                     if (src.dataset && src.dataset.snapIgnore === "true") {
@@ -225,13 +230,6 @@
                             openingLeft = absoluteTranslation > 0,
                             translateTo = whileDragX,
                             diff;
-                        
-                        if( (cache.intentChecked && !cache.hasIntent) || // Does user show intent?
-                            ((translated!==settings.minPosition) && (thePageX-cache.startDragX)>0 && (settings.disable==='left')) || // Left pane Disabled?
-                            ((translated!==settings.maxPosition) && (thePageX-cache.startDragX)<0 && (settings.disable==='right')) // Right pane Disabled?
-                        ){
-                            return;
-                        }
                         
                         if(settings.addBodyClasses){
                             if((absoluteTranslation)>0){
@@ -375,7 +373,7 @@
             if (opts.element) {
                 utils.deepExtend(settings, opts);
                 cache.vendor = utils.vendor();
-                if(typeof cache.vendor!=='undefined'){
+                if(typeof cache.vendor!=='undefined' && settings.touchToDrag){
                     action.drag.listen();
                 }
             }
