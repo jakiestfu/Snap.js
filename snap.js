@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.6.2
+ * Version: 1.6.3
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -376,7 +376,7 @@
             if (opts.element) {
                 utils.deepExtend(settings, opts);
                 cache.vendor = utils.vendor();
-                if(typeof cache.vendor!=='undefined' && !settings.touchToDrag){
+                if(typeof cache.vendor!=='undefined' && settings.touchToDrag){
                     action.drag.listen();
                 }
             }
