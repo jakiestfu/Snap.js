@@ -85,12 +85,12 @@ snapper.open('right');
 snapper.close();
 ```
 
-### `expose`: Opens the pane entirely
+### `expand`: Opens the pane entirely
 
 ```javascript
-snapper.expose('left');
+snapper.expand('left');
 // OR
-snapper.expose('right');
+snapper.expand('right');
 ```
 
 ### `disable`: Disables sliding events
