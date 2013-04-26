@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.6.4
+ * Version: 1.7.0
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -152,7 +152,7 @@
                         animatingInterval = setInterval(function() {
                             utils.dispatchEvent('animating');
                         }, 1);
-                    
+
                     utils.events.addEvent(settings.element, transitionCallback, function() {
                         settings.element.style[cache.vendor+'Transition'] = '';
                         cache.translation = action.translate.get.matrix(4);
@@ -164,9 +164,9 @@
                 },
                 x: function(n) {
                     if( (settings.disable=='left' && n>0) ||
-                		(settings.disable=='right' && n<0)
-                	){ return; }
-                	
+                        (settings.disable=='right' && n<0)
+                    ){ return; }
+
                     var theTranslate = 'translate3d(' + parseInt(n, 10) + 'px, 0,0)';
                     settings.element.style[cache.vendor+'Transform'] = theTranslate;
                 }
@@ -197,8 +197,8 @@
                     cache.isDragging = true;
                     cache.hasIntent = null;
                     cache.intentChecked = false;
-                    cache.startDragX = utils.hasTouch ? e.touches[0].pageX : e.pageX;
-                    cache.startDragY = utils.hasTouch ? e.touches[0].pageY : e.pageY;
+                    cache.startDragX = (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0].pageX : e.pageX;
+                    cache.startDragY = (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0].pageY : e.pageY;
                     cache.dragWatchers = {
                         current: 0,
                         last: 0,
@@ -221,7 +221,7 @@
                 },
                 dragging: function(e) {
                     if (cache.isDragging) {
-                        
+
                         var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
                             thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY,
                             translated = cache.translation,
@@ -230,7 +230,7 @@
                             openingLeft = absoluteTranslation > 0,
                             translateTo = whileDragX,
                             diff;
-                        
+
                         if(settings.addBodyClasses){
                             if((absoluteTranslation)>0){
                                 utils.klass.add(doc.body, 'snapjs-left');
@@ -240,7 +240,7 @@
                                 utils.klass.remove(doc.body, 'snapjs-left');
                             }
                         }
-                        
+
                         if (cache.hasIntent === false || cache.hasIntent === null) {
                             var deg = utils.angleOfDrag(thePageX, thePageY),
                                 inRightRange = (deg >= 0 && deg <= settings.slideIntent) || (deg <= 360 && deg > (360 - settings.slideIntent)),
@@ -252,17 +252,17 @@
                             }
                             cache.intentChecked = true;
                         }
-                        
+
                         if ( 
                             (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) && // Has user met minimum drag distance?
                             (cache.hasIntent === false)
                         ) {
                             return;
                         }
-                        
+
                         utils.events.preventDefaultEvent(e);
                         utils.dispatchEvent('drag');
-                        
+
                         cache.dragWatchers.current = thePageX;
                         // Determine which direction we are going
                         if (cache.dragWatchers.last > thePageX) {
@@ -382,7 +382,7 @@
          * Public
          */
         this.open = function(side) {
-        
+
             utils.klass.remove(doc.body, 'snapjs-expand-left');
             utils.klass.remove(doc.body, 'snapjs-expand-right');
 
@@ -416,7 +416,7 @@
             }
             action.translate.easeTo(to);
         };
-        
+
         this.on = function(evt, fn) {
             eventList[evt] = fn;
             return this;
@@ -426,12 +426,18 @@
                 eventList[evt] = false;
             }
         };
+
         this.enable = function() {
             action.drag.listen();
         };
         this.disable = function() {
             action.drag.stopListening();
         };
+
+        this.settings = function(opts){
+            utils.deepExtend(settings, opts);
+        };
+
         this.state = function() {
             var state,
                 fromLeft = action.translate.get.matrix(4);
