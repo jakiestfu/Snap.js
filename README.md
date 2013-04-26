@@ -129,6 +129,12 @@ snapper.off('drag');
 The event names listed above apply for the `off` method.
 
 
+### `settings`: Updates the settings for an already instantiated object
+```javascript
+snapper.settings({yourSettings});
+```
+Currently, `settings.element`, `settings.touchToDrag` cannot be updated. To update the element, instantiate a new object. To allow listening to a drag, use `snapper.enable()`
+
 ### `state`: Returns detailed information about the state of the pane
 
 ```javascript
