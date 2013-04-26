@@ -72,3 +72,15 @@ html, body {
 .snapjs-expand-right .right-drawer{
 	width: 100%;
 	}
+
+.opt{
+	padding: 20px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.opt p{
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 5px;
+	color: #222;
+	color: rgba(0,0,0,0.6);
+}
