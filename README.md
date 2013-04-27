@@ -227,3 +227,7 @@ With `addBodyClasses` set to `true` in your initialize options, one of the two c
 ## Licensing
 
 MIT, dawg
+
+## Extras
+
+DEATH TO SIDR! HUZZAH
