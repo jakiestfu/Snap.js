@@ -23,6 +23,16 @@ A Library for creating beautiful mobile shelfs in Javascript
 * Disabled Sides (left or right)
 * Supports [Ratchet](http://maker.github.com/ratchet/) (with templates!)
 
+## Installation
+
+As standalone just include the file in a script tag:
+
+    <script src="snap.js"></script>
+
+As a <a href="http://component.io" target="_blank">web component</a> do:
+
+    $ component install jakiestfu/Snap.js
+
 ## Usage
 
 ```javascript
