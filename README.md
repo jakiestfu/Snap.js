@@ -8,6 +8,12 @@ A Library for creating beautiful mobile shelfs in Javascript
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
 ## Features
+
+To install as <a href="http://component.io" target="_blank">web component</a>
+
+    $ component install jakiestfu/Snap.js
+
+## Features
 * Firefox 10+, Wide Webkit Support (Android WebKit 2.3.X+)
 * Library Independent
 * High Customization
