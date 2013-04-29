@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.0
+ * Version: 1.7.1
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -54,6 +54,9 @@
                         out: utils.hasTouch ? 'touchcancel' : 'mouseout'
                     };
                 return eventTypes[action];
+            },
+            page: function(t, e){
+            	return (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0]['page'+t] : e['page'+t];
             },
             klass: {
                 has: function(el, name){
@@ -197,8 +200,8 @@
                     cache.isDragging = true;
                     cache.hasIntent = null;
                     cache.intentChecked = false;
-                    cache.startDragX = (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0].pageX : e.pageX;
-                    cache.startDragY = (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0].pageY : e.pageY;
+                    cache.startDragX = utils.page('X', e);
+                    cache.startDragY = utils.page('Y', e);
                     cache.dragWatchers = {
                         current: 0,
                         last: 0,
@@ -222,8 +225,8 @@
                 dragging: function(e) {
                     if (cache.isDragging) {
 
-                        var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
-                            thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY,
+                        var thePageX = utils.page('X', e),
+                            thePageY = utils.page('Y', e),
                             translated = cache.translation,
                             absoluteTranslation = action.translate.get.matrix(4),
                             whileDragX = thePageX - cache.startDragX,
@@ -364,7 +367,7 @@
                             }
                         }
                         cache.isDragging = false;
-                        cache.startDragX = utils.hasTouch ? e.touches[0].pageX : e.pageX;
+                        cache.startDragX = utils.page('X', e);
                     }
                 }
             }
