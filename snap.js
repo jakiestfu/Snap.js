@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.1
+ * Version: 1.7.2
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -48,15 +48,15 @@
             hasTouch: (doc.ontouchstart === null),
             eventType: function(action) {
                 var eventTypes = {
-                        down: utils.hasTouch ? 'touchstart' : 'mousedown',
-                        move: utils.hasTouch ? 'touchmove' : 'mousemove',
-                        up: utils.hasTouch ? 'touchend' : 'mouseup',
-                        out: utils.hasTouch ? 'touchcancel' : 'mouseout'
+                        down: (utils.hasTouch ? 'touchstart' : 'mousedown'),
+                        move: (utils.hasTouch ? 'touchmove' : 'mousemove'),
+                        up: (utils.hasTouch ? 'touchend' : 'mouseup'),
+                        out: (utils.hasTouch ? 'touchcancel' : 'mouseout')
                     };
                 return eventTypes[action];
             },
             page: function(t, e){
-            	return (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0]['page'+t] : e['page'+t];
+                return (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0]['page'+t] : e['page'+t];
             },
             klass: {
                 has: function(el, name){
@@ -68,12 +68,12 @@
                     }
                 },
                 remove: function(el, name){
-                    el.className = (el.className).replace(" "+name, '');
+                    el.className = (el.className).replace(" "+name, "");
                 }
             },
             dispatchEvent: function(type) {
                 if (typeof eventList[type] === 'function') {
-                    eventList[type].call();
+                    return eventList[type].call();
                 }
             },
             vendor: function(){
@@ -115,19 +115,19 @@
             events: {
                 addEvent: function addEvent(element, eventName, func) {
                     if (element.addEventListener) {
-                        element.addEventListener(eventName, func, false);
+                        return element.addEventListener(eventName, func, false);
                     } else if (element.attachEvent) {
-                        element.attachEvent("on" + eventName, func);
+                        return element.attachEvent("on" + eventName, func);
                     }
                 },
                 removeEvent: function addEvent(element, eventName, func) {
                     if (element.addEventListener) {
-                        element.removeEventListener(eventName, func, false);
+                        return element.removeEventListener(eventName, func, false);
                     } else if (element.attachEvent) {
-                        element.detachEvent("on" + eventName, func);
+                        return element.detachEvent("on" + eventName, func);
                     }
                 },
-                preventDefaultEvent: function(e) {
+                prevent: function(e) {
                     if (e.preventDefault) {
                         e.preventDefault();
                     } else {
@@ -263,7 +263,7 @@
                             return;
                         }
 
-                        utils.events.preventDefaultEvent(e);
+                        utils.events.prevent(e);
                         utils.dispatchEvent('drag');
 
                         cache.dragWatchers.current = thePageX;
@@ -329,7 +329,7 @@
                         var translated = action.translate.get.matrix(4);
                         // Tap Close
                         if (cache.dragWatchers.current === 0 && translated !== 0 && settings.tapToClose) {
-                            utils.events.preventDefaultEvent(e);
+                            utils.events.prevent(e);
                             action.translate.easeTo(0);
                             cache.isDragging = false;
                             cache.startDragX = 0;
