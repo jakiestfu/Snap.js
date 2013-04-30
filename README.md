@@ -251,6 +251,24 @@ myToggleButton.addEventListener('click', function(){
 });
 ```
 
+### How do I disable Snap.js dragging for my touch slider?
+Snap.js supports cascading cancellation of events via a data attribute `data-snap-ignore`. If you were to use a slider, your markup might look like the following:
+
+```html
+<div class="slider" data-snap-ignore="true">
+    <ul>
+        <li><img src="slide.jpg"></li>
+        <li><img src="slide.jpg"></li>
+        <li><img src="slide.jpg"></li>
+        <li><img src="slide.jpg"></li>
+        <li><img src="slide.jpg"></li>
+    </ul>
+</div>
+```
+
+All interactions on children elements of the element with the `data-snap-ignore` attribute will have their Snap.js events ignored.
+
+
 ### - I am using Push.js from Ratchet, I keep losing my events on my elements, how can I fix this?
 Simple. As wack as Push.js is (yes, it is in desperate need of attention as of v1.0.0), we can still solve this problem with it's only callback, `'push'`.
 
