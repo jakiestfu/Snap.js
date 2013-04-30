@@ -251,7 +251,7 @@ myToggleButton.addEventListener('click', function(){
 });
 ```
 
-### How do I disable Snap.js dragging for my touch slider?
+### - How do I disable Snap.js dragging for my touch slider?
 Snap.js supports cascading cancellation of events via a data attribute `data-snap-ignore`. If you were to use a slider, your markup might look like the following:
 
 ```html
