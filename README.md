@@ -7,6 +7,20 @@ A Library for creating beautiful mobile shelfs in Javascript
 
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
+* auto-gen TOC:
+{:toc}
+
+* [Features](#features)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Settings &amp; Defaults](#settings-and-defaults)
+* [Public Methods](#public-methods)
+* [Gotchas](#gotchas)
+* [FAQ's](#faq)
+* [Licensing](#licensing)
+* [Extras](#extras)
+
+
 ## Features
 * Firefox 10+, Wide Webkit Support (Android WebKit 2.3.X+)
 * Library Independent
@@ -27,11 +41,15 @@ A Library for creating beautiful mobile shelfs in Javascript
 
 As standalone just include the file in a script tag:
 
-    <script src="snap.js"></script>
+```html
+<script src="snap.js"></script>
+```
 
 As a <a href="http://component.io" target="_blank">web component</a> do:
 
-    $ component install jakiestfu/Snap.js
+```shell
+$ component install jakiestfu/Snap.js
+```
 
 ## Usage
 
@@ -171,21 +189,6 @@ The data returned from the `state` method will look like the following:
 } 
 ```
 
-### Toggles
-With the provided API, Toggles can be done like the following:
-
-```javascript
-myToggleButton.addEventListener('click', function(){
-
-    if( snapper.state().state=="left" ){
-        snapper.close();
-    } else {
-        snapper.open('left');
-    }
-
-});
-```
-
 ## Gotchas
 
 ### Layout
@@ -231,6 +234,61 @@ With `addBodyClasses` set to `true` in your initialize options, one of the two c
 .snapjs-right .left-drawer,
 .snapjs-left .right-drawer {
     display: none;
+}
+```
+
+## FAQ
+
+### - How do I make a toggle button?
+Toggles have been a popular request, but rather than bog the library down with additional methods, you can utilize the powerful API of Snap.js to create your own toggle. Toggles can be done like the following:
+
+```javascript
+myToggleButton.addEventListener('click', function(){
+
+    if( snapper.state().state=="left" ){
+        snapper.close();
+    } else {
+        snapper.open('left');
+    }
+
+});
+```
+
+### - I am using Push.js from Ratchet, I keep losing my events on my elements, how can I fix this?
+Simple. As wack as Push.js is (yes, it is in desperate need of attention as of v1.0.0), we can still solve this problem with it's only callback, `'push'`.
+
+```javascript
+// The function that will initialize your Snap.js instance
+var doSnap = function(){
+    if(window.snapper){
+         // Snap.js already exists, we just need to re-bind events
+        window.snapper.enable();
+    } else {
+        // Initialize Snap.js
+        window.snapper = new Snap({
+            element: document.getElementById('content')
+        });
+    } 
+};
+
+window.addEventListener('push', doSnap);
+doSnap();
+```
+
+### - Snap.js works on my Android device but i cannot scroll the content in my drawers, what gives?
+Older Android devices (and iPhone as well) do not have native support for overflow scrolling. To solve this, you may use the wonderful library called [iScroll](https://github.com/cubiq/iscroll)
+
+### - `transform: translate3d()` breaks my fixed child elements, how can I solve this?
+[This is a problem with Chromium](https://code.google.com/p/chromium/issues/detail?id=20574) and should be fixed soon. I would advise not having your direct children element set to fixed, that may possibly solve your problem.
+
+### - I am experiencing a weird flicker when the CSS transform is applied
+To solve the flicker, apply the following CSS to the element in question
+```css
+#content{
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden; /* Chrome and Safari */
+    -moz-backface-visibility:hidden; /* Firefox */
+    -ms-backface-visibility:hidden; /* Internet Explorer 10+ */
 }
 ```
 
