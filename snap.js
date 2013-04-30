@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.3
+ * Version: 1.7.4
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -231,7 +231,7 @@
                     };
                 },
                 dragging: function(e) {
-                    if (cache.isDragging) {
+                    if (cache.isDragging && settings.touchToDrag) {
 
                         var thePageX = utils.page('X', e),
                             thePageY = utils.page('Y', e),
@@ -335,6 +335,7 @@
                     if (cache.isDragging) {
                         utils.dispatchEvent('end');
                         var translated = action.translate.get.matrix(4);
+                        
                         // Tap Close
                         if (cache.dragWatchers.current === 0 && translated !== 0 && settings.tapToClose) {
                             utils.events.prevent(e);
@@ -343,6 +344,7 @@
                             cache.startDragX = 0;
                             return;
                         }
+                        
                         // Revealing Left
                         if (cache.simpleStates.opening === 'left') {
                             // Halfway, Flicking, or Too Far Out
@@ -384,7 +386,7 @@
             if (opts.element) {
                 utils.deepExtend(settings, opts);
                 cache.vendor = utils.vendor();
-                if(typeof cache.vendor!=='undefined' && settings.touchToDrag){
+                if(typeof cache.vendor!=='undefined'){
                     action.drag.listen();
                 }
             }
