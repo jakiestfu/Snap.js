@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.2
+ * Version: 1.7.3
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -140,9 +140,13 @@
             translate: {
                 get: {
                     matrix: function(index) {
-                        var matrix = win.getComputedStyle(settings.element)[cache.vendor+'Transform'].match(/\((.*)\)/);
+                        var matrix = win.getComputedStyle(settings.element)[cache.vendor+'Transform'].match(/\((.*)\)/),
+                            ieOffset = 8;
                         if (matrix) {
                             matrix = matrix[1].split(',');
+                            if(matrix.length==16){
+                                index+=ieOffset;
+                            }
                             return parseInt(matrix[index], 10);
                         }
                         return 0;
@@ -150,8 +154,9 @@
                 },
                 easeTo: function(n) {
                     cache.easing = true;
+
                     settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
-                    var transitionCallback = cache.vendor==='Moz' ? 'transitionend' : cache.vendor+'TransitionEnd',
+                    var transitionCallback = (cache.vendor==='Moz' || cache.vendor=='ms') ? 'transitionend' : cache.vendor+'TransitionEnd',
                         animatingInterval = setInterval(function() {
                             utils.dispatchEvent('animating');
                         }, 1);
@@ -191,7 +196,10 @@
 
                     // No drag on ignored elements
                     var src = e.target ? e.target : e.srcElement;
-                    if (src.dataset && src.dataset.snapIgnore === "true") {
+                    if (
+                        (src.dataset && src.dataset.snapIgnore === "true") ||
+                        (src.getAttribute('data-snap-ignore'))
+                    ) {
                         utils.dispatchEvent('ignore');
                         return;
                     }
