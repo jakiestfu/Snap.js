@@ -7,6 +7,8 @@ A Library for creating beautiful mobile shelfs in Javascript
 
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
+:with_toc_data
+
 * [Features](#features)
 * [Installation](#installation)
 * [Usage](#usage)
