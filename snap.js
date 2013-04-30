@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.4
+ * Version: 1.7.5
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -86,6 +86,9 @@
                     }
                 }
             },
+            transitionCallback: function(){
+                return (cache.vendor==='Moz' || cache.vendor=='ms') ? 'transitionend' : cache.vendor+'TransitionEnd';
+            },
             deepExtend: function(destination, source) {
                 var property;
                 for (property in source) {
@@ -152,22 +155,31 @@
                         return 0;
                     }
                 },
+                easeCallback: function(){
+                    settings.element.style[cache.vendor+'Transition'] = '';
+                    cache.translation = action.translate.get.matrix(4);
+                    cache.easing = false;
+                    clearInterval(cache.animatingInterval);
+
+                    if(cache.easingTo===0){
+                        utils.klass.remove(doc.body, 'snapjs-right');
+                        utils.klass.remove(doc.body, 'snapjs-left');
+                    }
+
+                    utils.dispatchEvent('animated');
+                    utils.events.removeEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
+                },
                 easeTo: function(n) {
                     cache.easing = true;
+                    cache.easingTo = n;
 
                     settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
-                    var transitionCallback = (cache.vendor==='Moz' || cache.vendor=='ms') ? 'transitionend' : cache.vendor+'TransitionEnd',
-                        animatingInterval = setInterval(function() {
-                            utils.dispatchEvent('animating');
-                        }, 1);
 
-                    utils.events.addEvent(settings.element, transitionCallback, function() {
-                        settings.element.style[cache.vendor+'Transition'] = '';
-                        cache.translation = action.translate.get.matrix(4);
-                        cache.easing = false;
-                        clearInterval(animatingInterval);
-                        utils.dispatchEvent('animated');
-                    });
+                    cache.animatingInterval = setInterval(function() {
+                        utils.dispatchEvent('animating');
+                    }, 1);
+
+                    utils.events.addEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
                     action.translate.x(n);
                 },
                 x: function(n) {
