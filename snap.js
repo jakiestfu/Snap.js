@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.5
+ * Version: 1.7.8
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -137,6 +137,15 @@
                         e.returnValue = false;
                     }
                 }
+            },
+            parentUntil: function(el, attr) {
+                while (el.parentNode) {
+                   if (el.getAttribute && el.getAttribute(attr)){
+                        return el;
+                    }
+                    el = el.parentNode;
+                }
+                return null;
             }
         },
         action = {
@@ -207,14 +216,13 @@
                 startDrag: function(e) {
 
                     // No drag on ignored elements
-                    var src = e.target ? e.target : e.srcElement;
-                    if (
-                        (src.dataset && src.dataset.snapIgnore === "true") ||
-                        (src.getAttribute('data-snap-ignore'))
-                    ) {
+                    var ignoreParent = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-snap-ignore');
+                    
+                    if (ignoreParent) {
                         utils.dispatchEvent('ignore');
                         return;
                     }
+
                     utils.dispatchEvent('start');
                     settings.element.style[cache.vendor+'Transition'] = '';
                     cache.isDragging = true;
@@ -254,6 +262,11 @@
                             translateTo = whileDragX,
                             diff;
 
+                        // Shown no intent already
+                        if((cache.intentChecked && !cache.hasIntent)){
+                            return;
+                        }
+
                         if(settings.addBodyClasses){
                             if((absoluteTranslation)>0){
                                 utils.klass.add(doc.body, 'snapjs-left');
@@ -276,7 +289,7 @@
                             cache.intentChecked = true;
                         }
 
-                        if ( 
+                        if (
                             (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) && // Has user met minimum drag distance?
                             (cache.hasIntent === false)
                         ) {
