@@ -8,6 +8,7 @@ A Library for creating beautiful mobile shelfs in Javascript
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank"><img src="http://i.imgur.com/t3mGcEx.gif"></a>
 
 * [Features](#features)
+* [Support](#support)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Settings &amp; Defaults](#settings-and-defaults)
@@ -17,15 +18,13 @@ A Library for creating beautiful mobile shelfs in Javascript
 * [Licensing](#licensing)
 * [Extras](#extras)
 
-
 ## Features
-* Firefox 10+, Wide Webkit Support (Android WebKit 2.3.X+)
 * Library Independent
 * High Customization
 * Flick Support
 * User Intent Detection
 * Event Hooks
-* CSS3 Powered Animations
+* CSS3 Powered Animations with IE fallbacks
 * Drag Support
 * Programatic API
 * "No-Drag" Elements
@@ -33,6 +32,13 @@ A Library for creating beautiful mobile shelfs in Javascript
 * Enable/Disable Events
 * Disabled Sides (left or right)
 * Supports [Ratchet](http://maker.github.com/ratchet/) (with templates!)
+
+## Support
+* Firefox 10+
+* Wide Webkit Support (including Android WebKit 2.3.X)
+* IE 10
+* IE 9 Supports Toggling, Dragging but no Transitions
+* IE 7/8 Supports Toggling but no dragging or Transitions
 
 ## Installation
 
