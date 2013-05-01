@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.0
+ * Version: 1.7.8
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -48,12 +48,15 @@
             hasTouch: (doc.ontouchstart === null),
             eventType: function(action) {
                 var eventTypes = {
-                        down: utils.hasTouch ? 'touchstart' : 'mousedown',
-                        move: utils.hasTouch ? 'touchmove' : 'mousemove',
-                        up: utils.hasTouch ? 'touchend' : 'mouseup',
-                        out: utils.hasTouch ? 'touchcancel' : 'mouseout'
+                        down: (utils.hasTouch ? 'touchstart' : 'mousedown'),
+                        move: (utils.hasTouch ? 'touchmove' : 'mousemove'),
+                        up: (utils.hasTouch ? 'touchend' : 'mouseup'),
+                        out: (utils.hasTouch ? 'touchcancel' : 'mouseout')
                     };
                 return eventTypes[action];
+            },
+            page: function(t, e){
+                return (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0]['page'+t] : e['page'+t];
             },
             klass: {
                 has: function(el, name){
@@ -65,12 +68,12 @@
                     }
                 },
                 remove: function(el, name){
-                    el.className = (el.className).replace(" "+name, '');
+                    el.className = (el.className).replace(" "+name, "");
                 }
             },
             dispatchEvent: function(type) {
                 if (typeof eventList[type] === 'function') {
-                    eventList[type].call();
+                    return eventList[type].call();
                 }
             },
             vendor: function(){
@@ -82,6 +85,9 @@
                         return prefixes[i];
                     }
                 }
+            },
+            transitionCallback: function(){
+                return (cache.vendor==='Moz' || cache.vendor=='ms') ? 'transitionend' : cache.vendor+'TransitionEnd';
             },
             deepExtend: function(destination, source) {
                 var property;
@@ -112,54 +118,77 @@
             events: {
                 addEvent: function addEvent(element, eventName, func) {
                     if (element.addEventListener) {
-                        element.addEventListener(eventName, func, false);
+                        return element.addEventListener(eventName, func, false);
                     } else if (element.attachEvent) {
-                        element.attachEvent("on" + eventName, func);
+                        return element.attachEvent("on" + eventName, func);
                     }
                 },
                 removeEvent: function addEvent(element, eventName, func) {
                     if (element.addEventListener) {
-                        element.removeEventListener(eventName, func, false);
+                        return element.removeEventListener(eventName, func, false);
                     } else if (element.attachEvent) {
-                        element.detachEvent("on" + eventName, func);
+                        return element.detachEvent("on" + eventName, func);
                     }
                 },
-                preventDefaultEvent: function(e) {
+                prevent: function(e) {
                     if (e.preventDefault) {
                         e.preventDefault();
                     } else {
                         e.returnValue = false;
                     }
                 }
+            },
+            parentUntil: function(el, attr) {
+                while (el.parentNode) {
+                   if (el.getAttribute && el.getAttribute(attr)){
+                        return el;
+                    }
+                    el = el.parentNode;
+                }
+                return null;
             }
         },
         action = {
             translate: {
                 get: {
                     matrix: function(index) {
-                        var matrix = win.getComputedStyle(settings.element)[cache.vendor+'Transform'].match(/\((.*)\)/);
+                        var matrix = win.getComputedStyle(settings.element)[cache.vendor+'Transform'].match(/\((.*)\)/),
+                            ieOffset = 8;
                         if (matrix) {
                             matrix = matrix[1].split(',');
+                            if(matrix.length==16){
+                                index+=ieOffset;
+                            }
                             return parseInt(matrix[index], 10);
                         }
                         return 0;
                     }
                 },
+                easeCallback: function(){
+                    settings.element.style[cache.vendor+'Transition'] = '';
+                    cache.translation = action.translate.get.matrix(4);
+                    cache.easing = false;
+                    clearInterval(cache.animatingInterval);
+
+                    if(cache.easingTo===0){
+                        utils.klass.remove(doc.body, 'snapjs-right');
+                        utils.klass.remove(doc.body, 'snapjs-left');
+                    }
+
+                    utils.dispatchEvent('animated');
+                    utils.events.removeEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
+                },
                 easeTo: function(n) {
                     cache.easing = true;
-                    settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
-                    var transitionCallback = cache.vendor==='Moz' ? 'transitionend' : cache.vendor+'TransitionEnd',
-                        animatingInterval = setInterval(function() {
-                            utils.dispatchEvent('animating');
-                        }, 1);
+                    cache.easingTo = n;
 
-                    utils.events.addEvent(settings.element, transitionCallback, function() {
-                        settings.element.style[cache.vendor+'Transition'] = '';
-                        cache.translation = action.translate.get.matrix(4);
-                        cache.easing = false;
-                        clearInterval(animatingInterval);
-                        utils.dispatchEvent('animated');
-                    });
+                    settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
+
+                    cache.animatingInterval = setInterval(function() {
+                        utils.dispatchEvent('animating');
+                    }, 1);
+
+                    utils.events.addEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
                     action.translate.x(n);
                 },
                 x: function(n) {
@@ -187,18 +216,20 @@
                 startDrag: function(e) {
 
                     // No drag on ignored elements
-                    var src = e.target ? e.target : e.srcElement;
-                    if (src.dataset && src.dataset.snapIgnore === "true") {
+                    var ignoreParent = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-snap-ignore');
+                    
+                    if (ignoreParent) {
                         utils.dispatchEvent('ignore');
                         return;
                     }
+
                     utils.dispatchEvent('start');
                     settings.element.style[cache.vendor+'Transition'] = '';
                     cache.isDragging = true;
                     cache.hasIntent = null;
                     cache.intentChecked = false;
-                    cache.startDragX = (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0].pageX : e.pageX;
-                    cache.startDragY = (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0].pageY : e.pageY;
+                    cache.startDragX = utils.page('X', e);
+                    cache.startDragY = utils.page('Y', e);
                     cache.dragWatchers = {
                         current: 0,
                         last: 0,
@@ -220,16 +251,21 @@
                     };
                 },
                 dragging: function(e) {
-                    if (cache.isDragging) {
+                    if (cache.isDragging && settings.touchToDrag) {
 
-                        var thePageX = utils.hasTouch ? e.touches[0].pageX : e.pageX,
-                            thePageY = utils.hasTouch ? e.touches[0].pageY : e.pageY,
+                        var thePageX = utils.page('X', e),
+                            thePageY = utils.page('Y', e),
                             translated = cache.translation,
                             absoluteTranslation = action.translate.get.matrix(4),
                             whileDragX = thePageX - cache.startDragX,
                             openingLeft = absoluteTranslation > 0,
                             translateTo = whileDragX,
                             diff;
+
+                        // Shown no intent already
+                        if((cache.intentChecked && !cache.hasIntent)){
+                            return;
+                        }
 
                         if(settings.addBodyClasses){
                             if((absoluteTranslation)>0){
@@ -253,14 +289,14 @@
                             cache.intentChecked = true;
                         }
 
-                        if ( 
+                        if (
                             (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) && // Has user met minimum drag distance?
                             (cache.hasIntent === false)
                         ) {
                             return;
                         }
 
-                        utils.events.preventDefaultEvent(e);
+                        utils.events.prevent(e);
                         utils.dispatchEvent('drag');
 
                         cache.dragWatchers.current = thePageX;
@@ -324,14 +360,16 @@
                     if (cache.isDragging) {
                         utils.dispatchEvent('end');
                         var translated = action.translate.get.matrix(4);
+                        
                         // Tap Close
                         if (cache.dragWatchers.current === 0 && translated !== 0 && settings.tapToClose) {
-                            utils.events.preventDefaultEvent(e);
+                            utils.events.prevent(e);
                             action.translate.easeTo(0);
                             cache.isDragging = false;
                             cache.startDragX = 0;
                             return;
                         }
+                        
                         // Revealing Left
                         if (cache.simpleStates.opening === 'left') {
                             // Halfway, Flicking, or Too Far Out
@@ -364,7 +402,7 @@
                             }
                         }
                         cache.isDragging = false;
-                        cache.startDragX = utils.hasTouch ? e.touches[0].pageX : e.pageX;
+                        cache.startDragX = utils.page('X', e);
                     }
                 }
             }
@@ -373,7 +411,7 @@
             if (opts.element) {
                 utils.deepExtend(settings, opts);
                 cache.vendor = utils.vendor();
-                if(typeof cache.vendor!=='undefined' && settings.touchToDrag){
+                if(typeof cache.vendor!=='undefined'){
                     action.drag.listen();
                 }
             }
