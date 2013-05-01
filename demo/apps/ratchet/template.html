@@ -16,6 +16,9 @@
 		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="touch-icons/apple-touch-icon-72x72.png">
 		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="touch-icons/apple-touch-icon-57x57.png">
 
+		<!-- Include the base Snap.js CSS -->
+		<link rel="stylesheet" href="../../../snap.css">
+
 		<!-- Include the compiled Ratchet CSS -->
 		<link rel="stylesheet" href="ratchet.css">
 
@@ -24,53 +27,8 @@
 
 		<!-- Intro paragraph styles. Delete once you start using this page -->
 		<style type="text/css">
-		
-			/* SNAP.JS STYLES BEGIN */
-			#content{
-				height: 100%;
-				z-index: 4;
-				position: relative;
-			}
-			
-			.drawers{
-				position: absolute;
-				z-index: 3;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-			}
-			.drawers .list{margin: 0;}
-			
-			.left-drawer,
-			.right-drawer{
-				display: none;
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 265px;
-				bottom: 0;
-				z-index: 1;
-				overflow: auto;
-				-webkit-transition-property: top, bottom;
-				transition-property: top, bottom;
-				-webkit-transition-duration: .2s, .2s;
-				transition-duration: .2s, .2s;
-				-webkit-transition-timing-function: linear, linear;
-				transition-timing-function: linear, linear;
-				-webkit-overflow-scrolling: touch;
-			}
-			.right-drawer{
-				left: auto;
-				right: 0;
-			}
-				
-			.active-drawer{
-				z-index:2;
-				display: block;
-			}
-			/* SNAP.JS STYLES END */
-			
+			.snap-drawers .list{margin: 0;}
+
 			.welcome {
 				line-height: 1.5;
 				color: #555;
@@ -85,8 +43,8 @@
 	</head>
 	<body>
 	
-	<div class="drawers">
-		<div class="left-drawer" id="left-drawer">
+	<div class="snap-drawers">
+		<div class="snap-drawer snap-drawer-left" id="left-drawer">
 			<ul class="list">
               <h2>Snap.js</h2>
 			  <li class="list-divider">Share</li>
@@ -107,7 +65,7 @@
 			  <li><a href="template.html" data-ignore="push">Ratchet</a></li>
 			</ul>
 		</div>
-		<div class="right-drawer" id="right-drawer">
+		<div class="snap-drawer snap-drawer-right" id="right-drawer">
 			<ul class="list">
 			  <li>List item 1 <span class="chevron"></span></li>
 			  <li>List item 2 <span class="chevron"></span></li>
@@ -133,7 +91,7 @@
 		</div>
 	</div>
 	
-	<div id="content">
+	<div id="content" class="snap-content">
 	
 		<!-- Make sure all your bars are the first things in your <body> -->
 		<header class="bar-title">
