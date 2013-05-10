@@ -15,6 +15,7 @@ A Library for creating beautiful mobile shelfs in Javascript
 * [Public Methods](#public-methods)
 * [Gotchas](#gotchas)
 * [FAQ's](#faq)
+* [Compliments](#compliments)
 * [Licensing](#licensing)
 * [Extras](#extras)
 
