@@ -313,6 +313,14 @@ To solve the flicker, apply the following CSS to the element in question
 }
 ```
 
+## Compliments
+
+This code attempts to make your webapp's feel more "native". These other repos go well with it, too!
+
+* [Snap.js](https://github.com/jakiestfu/Snap.js)
+* [AppScroll.js](https://github.com/jakiestfu/AppScroll)
+* [fastclick](https://github.com/ftlabs/fastclick)
+
 ## Licensing
 
 MIT, dawg
