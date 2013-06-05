@@ -24,9 +24,11 @@ A Library for creating beautiful mobile shelfs in Javascript
 * High Customization
 * Flick Support
 * User Intent Detection
+* Disable Hyperextension
 * Event Hooks
 * CSS3 Powered Animations with IE fallbacks
 * Drag Support
+* Drag Handle Support
 * Programatic API
 * "No-Drag" Elements
 * Definable Easing Mode
@@ -67,8 +69,10 @@ var snapper = new Snap({
 ```javascript
 settings = {
     element: null,
+    dragger: null,
     disable: 'none',
     addBodyClasses: true,
+    hyperextensible: true,
     resistance: 0.5,
     flickThreshold: 50,
     transitionSpeed: 0.3,
@@ -82,19 +86,21 @@ settings = {
 }
 ```
 
-* **`element`**: The element which the user will be sliding side to side
-* **`disable`**: String, set to 'left' or 'right' to disable the respective side
-* **`addBodyClasses`**: Add classes to the body to signify which side is being opened
-* **`resistance`**: The cooeficcient used to slow sliding when user has passed max or min threshold
-* **`flickThreshold`**: Number of pixels the user needs to swiftly travel to activate a "flick" open
-* **`transitionSpeed`**: The speed at which the pane slides open or closed
-* **`easing`**: The CSS3 Easing method you want to use for transitions
-* **`maxPosition`**: Maximum number of pixels the pane may be slid to the right
-* **`minPosition`**: Maximum number of pixels the pane may be slid to the left
+* `element`: The element which the user will be sliding side to side
+* `dragger`: The element which the user will be using to slide the target element side to side
+* `disable`: String, set to 'left' or 'right' to disable the respective side
+* `addBodyClasses`: Add classes to the body to signify which side is being opened
+* `hyperextensible`: If false, pane may not be slide past the minPosition and maxPosition
+* `resistance`: The cooeficcient used to slow sliding when user has passed max or min threshold
+* `flickThreshold`: Number of pixels the user needs to swiftly travel to activate a "flick" open
+* `transitionSpeed`: The speed at which the pane slides open or closed
+* `easing`: The CSS3 Easing method you want to use for transitions
+* `maxPosition`: Maximum number of pixels the pane may be slid to the right
+* `minPosition`: Maximum number of pixels the pane may be slid to the left
 * `tapToClose`: If true, tapping an open pane will close it
 * `touchToDrag`: If true, dragging the target `settings.element` will open/close the pane
-* **`minDragDistance`**: The minimum amount of pixels the user needs to drag within the `slideIntent` degrees to move the pane 
-* **`slideIntent`**: The number of degrees the user must initiate sliding in towards the left or right (see diagram below)
+* `minDragDistance`: The minimum amount of pixels the user needs to drag within the `slideIntent` degrees to move the pane 
+* `slideIntent`: The number of degrees the user must initiate sliding in towards the left or right (see diagram below)
 
 Notes on Slide Intent: The slide intent is an int between 0 and 90, and represents the degrees in the first quadrant of a circle that you would like to have mirrored on the X *and* Y axis. For example, if you have 40 set as your `slideIntent` value, the user would only be able to slide the pane by dragging in the blue area in the diagram below. Once intent has been defined, it will not change until the user releases.
 
@@ -148,7 +154,7 @@ The available methods to hook into are as follows:
 
 * `start`: Fired when touching down on the draggable pane and it begins to move
 * `drag`: Fired when the pane has been moved or slid
-* `stop`: Fired when the pane has been let go od
+* `end`: Fired when the pane has been let go of
 * `animating`: Fired when the pane is animating
 * `animated`: Fired when the pane is finished it's animations
 * `ignore`: Fired when trying to drag the pane but ended up dragging on an ignored element
@@ -325,7 +331,3 @@ This code attempts to make your webapp's feel more "native". These other repos g
 ## Licensing
 
 MIT, dawg
-
-## Extras
-
-DEATH TO SIDR! HUZZAH

@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.7.10
+ * Version: 1.9.0
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -15,8 +15,10 @@
     var Snap = Snap || function(userOpts) {
         var settings = {
             element: null,
+            dragger: null,
             disable: 'none',
             addBodyClasses: true,
+            hyperextensible: true,
             resistance: 0.5,
             flickThreshold: 50,
             transitionSpeed: 0.3,
@@ -63,12 +65,14 @@
                     return (el.className).indexOf(name) !== -1;
                 },
                 add: function(el, name){
-                    if(!utils.klass.has(el, name)){
+                    if(!utils.klass.has(el, name) && settings.addBodyClasses){
                         el.className += " "+name;
                     }
                 },
                 remove: function(el, name){
-                    el.className = (el.className).replace(" "+name, "");
+                    if(settings.addBodyClasses){
+                        el.className = (el.className).replace(" "+name, "");
+                    }
                 }
             },
             dispatchEvent: function(type) {
@@ -87,7 +91,7 @@
                 }
             },
             transitionCallback: function(){
-                return (cache.vendor==='Moz' || cache.vendor=='ms') ? 'transitionend' : cache.vendor+'TransitionEnd';
+                return (cache.vendor==='Moz' || cache.vendor==='ms') ? 'transitionend' : cache.vendor+'TransitionEnd';
             },
             canTransform: function(){
                 return typeof settings.element.style[cache.vendor+'Transform'] !== 'undefined';
@@ -142,8 +146,11 @@
                 }
             },
             parentUntil: function(el, attr) {
+                var isStr = typeof attr === 'string';
                 while (el.parentNode) {
-                   if (el.getAttribute && el.getAttribute(attr)){
+                    if (isStr && el.getAttribute && el.getAttribute(attr)){
+                        return el;
+                    } else if(!isStr && el === attr){
                         return el;
                     }
                     el = el.parentNode;
@@ -163,7 +170,7 @@
                                 ieOffset = 8;
                             if (matrix) {
                                 matrix = matrix[1].split(',');
-                                if(matrix.length==16){
+                                if(matrix.length===16){
                                     index+=ieOffset;
                                 }
                                 return parseInt(matrix[index], 10);
@@ -200,17 +207,27 @@
                         cache.animatingInterval = setInterval(function() {
                             utils.dispatchEvent('animating');
                         }, 1);
-
+                        
                         utils.events.addEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
                         action.translate.x(n);
                     }
-                    
+                    if(n===0){
+                           settings.element.style[cache.vendor+'Transform'] = '';
+                       }
                 },
                 x: function(n) {
-                    if( (settings.disable=='left' && n>0) ||
-                        (settings.disable=='right' && n<0)
+                    if( (settings.disable==='left' && n>0) ||
+                        (settings.disable==='right' && n<0)
                     ){ return; }
-
+                    
+                    if( !settings.hyperextensible ){
+                        if( n===settings.maxPosition || n>settings.maxPosition ){
+                            n=settings.maxPosition;
+                        } else if( n===settings.minPosition || n<settings.minPosition ){
+                            n=settings.minPosition;
+                        }
+                    }
+                    
                     n = parseInt(n, 10);
                     if(isNaN(n)){
                         n = 0;
@@ -242,13 +259,27 @@
                 },
                 startDrag: function(e) {
                     // No drag on ignored elements
-                    var ignoreParent = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-snap-ignore');
+                    var target = e.target ? e.target : e.srcElement,
+                        ignoreParent = utils.parentUntil(target, 'data-snap-ignore');
                     
                     if (ignoreParent) {
                         utils.dispatchEvent('ignore');
                         return;
                     }
-
+                    
+                    
+                    if(settings.dragger){
+                        var dragParent = utils.parentUntil(target, settings.dragger);
+                        
+                        // Only use dragger if we're in a closed state
+                        if( !dragParent && 
+                            (cache.translation !== settings.minPosition && 
+                            cache.translation !== settings.maxPosition
+                        )){
+                            return;
+                        }
+                    }
+                    
                     utils.dispatchEvent('start');
                     settings.element.style[cache.vendor+'Transition'] = '';
                     cache.isDragging = true;
