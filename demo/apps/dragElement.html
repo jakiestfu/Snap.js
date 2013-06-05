@@ -45,15 +45,16 @@
         <div id="content" class="snap-content">
             <div id="toolbar">
                 <a href="#" id="open-left"></a>
-                <h1>No Drag</h1>
+                <h1>Drag Element</h1>
             </div>
-            <div id="no-drag" data-snap-ignore="true">No Drag</div>
+            <div id="do-drag">Drag Handle</div>
         </div>
         
         <script type="text/javascript" src="../../snap.js"></script>
         <script type="text/javascript">
             var snapper = new Snap({
-                element: document.getElementById('content')
+                element: document.getElementById('content'),
+                dragger: document.getElementById('do-drag')
             });
         </script>
         <script type="text/javascript" src="../assets/demo.js"></script>
