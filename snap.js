@@ -497,6 +497,8 @@
         this.close = function() {
             utils.dispatchEvent('close');
             action.translate.easeTo(0);
+            utils.klass.remove(doc.body, 'snapjs-left');
+            utils.klass.remove(doc.body, 'snapjs-right');
         };
         this.expand = function(side){
             var to = win.innerWidth || doc.documentElement.clientWidth;
