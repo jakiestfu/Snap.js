@@ -158,6 +158,12 @@ The available methods to hook into are as follows:
 * `animating`: Fired when the pane is animating
 * `animated`: Fired when the pane is finished it's animations
 * `ignore`: Fired when trying to drag the pane but ended up dragging on an ignored element
+* `close`: Fired when close is called directly or if tapToClose is set to true
+* `open`: Fired when the menu is opened
+* `expandLeft`: Fired on expand('left')
+* `expandRight`: Fired on expand('right')
+* `enable`: Fired on enable
+* `disable`: Fired on disable
 
 ### `off`: Removes an event hook
 

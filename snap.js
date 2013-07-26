@@ -71,7 +71,7 @@
                 },
                 remove: function(el, name){
                     if(settings.addBodyClasses){
-                        el.className = (el.className).replace(" "+name, "");
+                        el.className = (el.className).replace(name, "").replace(/^\s+|\s+$/g, '');
                     }
                 }
             },
@@ -420,6 +420,7 @@
 
                         // Tap Close
                         if (cache.dragWatchers.current === 0 && translated !== 0 && settings.tapToClose) {
+                            utils.dispatchEvent('close');
                             utils.events.prevent(e);
                             action.translate.easeTo(0);
                             cache.isDragging = false;
@@ -475,7 +476,7 @@
          * Public
          */
         this.open = function(side) {
-
+            utils.dispatchEvent('open');
             utils.klass.remove(doc.body, 'snapjs-expand-left');
             utils.klass.remove(doc.body, 'snapjs-expand-right');
 
@@ -494,15 +495,18 @@
             }
         };
         this.close = function() {
+            utils.dispatchEvent('close');
             action.translate.easeTo(0);
         };
         this.expand = function(side){
             var to = win.innerWidth || doc.documentElement.clientWidth;
 
             if(side==='left'){
+                utils.dispatchEvent('expandLeft');
                 utils.klass.add(doc.body, 'snapjs-expand-left');
                 utils.klass.remove(doc.body, 'snapjs-expand-right');
             } else {
+                utils.dispatchEvent('expandRight');
                 utils.klass.add(doc.body, 'snapjs-expand-right');
                 utils.klass.remove(doc.body, 'snapjs-expand-left');
                 to *= -1;
@@ -521,9 +525,11 @@
         };
 
         this.enable = function() {
+            utils.dispatchEvent('enable');
             action.drag.listen();
         };
         this.disable = function() {
+            utils.dispatchEvent('disable');
             action.drag.stopListening();
         };
 
