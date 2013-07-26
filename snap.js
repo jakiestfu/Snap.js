@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.9.0
+ * Version: 1.9.2
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
