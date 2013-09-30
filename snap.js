@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  http://github.com/jakiestfu/Snap.js/
- * Version: 1.9.2
+ * Version: 1.9.3
  */
 /*jslint browser: true*/
 /*global define, module, ender*/
@@ -47,7 +47,7 @@
         },
         eventList = {},
         utils = {
-            hasTouch: ('ontouchstart' in document.documentElement || window.navigator.msPointerEnabled),
+            hasTouch: ('ontouchstart' in doc.documentElement || win.navigator.msPointerEnabled),
             eventType: function(action) {
                 var eventTypes = {
                         down: (utils.hasTouch ? 'touchstart' : 'mousedown'),
