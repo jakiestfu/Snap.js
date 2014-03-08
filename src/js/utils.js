@@ -29,7 +29,7 @@
                 }
             },
             remove: function(el, name){
-                if(settings.addBodyClasses){
+                if(utils.klass.has(el, name) && settings.addBodyClasses){
                     el.className = (el.className).replace(name, "").replace(/^\s+|\s+$/g, '');
                 }
             }
