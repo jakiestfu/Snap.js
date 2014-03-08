@@ -1,7 +1,8 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html lang="en-US">
     <head>
-        <title>Snap.js</title>
+        <meta charset="UTF-8">
+        <title>Snap.js Tests</title>
         <meta http-equiv="x-ua-compatible" content="IE=edge" />
         <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,7 +51,7 @@
         <script src="tests.js"></script>
         <script>
             window.onload = function(){
-                mocha.run();
+                (window.mochaPhantomJS) ? mochaPhantomJS.run() : mocha.run();
             };
         </script>
    </body>
