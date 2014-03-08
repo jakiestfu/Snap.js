@@ -25,7 +25,7 @@ A Library for creating beautiful mobile shelfs in Javascript
 * Flick Support
 * User Intent Detection
 * Disable Hyperextension
-* Event Hooks
+* Ev2.0.0-rc1 Hooks
 * CSS3 Powered Animations with IE fallbacks
 * Drag Support
 * Drag Handle Support
