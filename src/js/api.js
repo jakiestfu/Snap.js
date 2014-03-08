@@ -4,6 +4,7 @@
     var cache = Snap.cache;
     var action = Snap.action;
     var settings = Snap.settings;
+    var eventList = Snap.eventList;
 
     Snap.prototype.open = function(side) {
         utils.dispatchEvent('open');

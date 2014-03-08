@@ -119,5 +119,6 @@
     };
 
     Snap.utils = utils;
+    Snap.eventList = eventList;
 
 }).call(this, window, document, Snap);
