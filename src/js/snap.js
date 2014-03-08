@@ -2,10 +2,23 @@
 
     'use strict';
 
-    var Snap = function( userOpts ) {
-        return Snap.init( userOpts );
+    /**
+     * Our Snap global that initializes our instance
+     * @param {Object} opts The custom Snap.js options
+     */
+    var Snap = function( opts ) {
+        if (opts.element) {
+            Snap.utils.extend(Snap.settings, opts);
+            Snap.cache.vendor = Snap.utils.vendor();
+            Snap.cache.canTransform = Snap.utils.canTransform();
+            Snap.action.drag.listen();
+        }
     };
 
+    /**
+     * Our default settings for a Snap instance
+     * @type {Object}
+     */
     Snap.settings = {
         element: null,
         dragger: null,
@@ -25,6 +38,10 @@
         minDragDistance: 5
     };
 
+    /**
+     * Stores internally global data
+     * @type {Object}
+     */
     Snap.cache = {
         simpleStates: {
             opening: null,
@@ -38,15 +55,6 @@
                 sinceDirectionChange: 0,
                 percentage: 0
             }
-        }
-    };
-
-    Snap.init = function(opts) {
-        if (opts.element) {
-            Snap.utils.extend(Snap.settings, opts);
-            Snap.cache.vendor = Snap.utils.vendor();
-            Snap.cache.canTransform = Snap.utils.canTransform();
-            Snap.action.drag.listen();
         }
     };
 

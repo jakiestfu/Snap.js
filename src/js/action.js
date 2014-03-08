@@ -5,8 +5,19 @@
     var settings = Snap.settings;
 
     var action = {
+
+        /**
+         * Handles translating the elements position
+         * @type {Object}
+         */
         translate: {
             get: {
+
+                /**
+                 * Returns the amount an element is translated
+                 * @param  {Number} index The index desired from the CSS3 values of translate3d
+                 * @return {Number}       The amount of pixels an element is translated
+                 */
                 matrix: function(index) {
 
                     if( !cache.canTransform ){
@@ -25,6 +36,10 @@
                     }
                 }
             },
+
+            /**
+             * Called when the element has finished transitioning
+             */
             easeCallback: function(){
                 settings.element.style[cache.vendor+'Transition'] = '';
                 cache.translation = action.translate.get.matrix(4);
@@ -38,6 +53,11 @@
                 utils.dispatchEvent('animated');
                 utils.events.removeEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
             },
+
+            /**
+             * Animates the pane by the specified amount of pixels
+             * @param  {Number} n The amount of pixels to move the pane
+             */
             easeTo: function(n) {
 
                 if( !cache.canTransform ){
@@ -53,9 +73,14 @@
                     action.translate.x(n);
                 }
                 if(n===0){
-                       settings.element.style[cache.vendor+'Transform'] = '';
-                   }
+                    settings.element.style[cache.vendor+'Transform'] = '';
+                }
             },
+
+            /**
+             * Immediately translates the element on its X axis
+             * @param  {Number} n Amount of pixels to translate
+             */
             x: function(n) {
                 if( (settings.disable==='left' && n>0) ||
                     (settings.disable==='right' && n<0)
@@ -85,7 +110,16 @@
                 }
             }
         },
+
+        /**
+         * Handles all the events that interface with dragging
+         * @type {Object}
+         */
         drag: {
+
+            /**
+             * Begins listening for drag events on our element
+             */
             listen: function() {
                 cache.translation = 0;
                 cache.easing = false;
@@ -93,11 +127,20 @@
                 utils.events.addEvent(settings.element, utils.eventType('move'), action.drag.dragging);
                 utils.events.addEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
             },
+
+            /**
+             * Stops listening for drag events on our element
+             */
             stopListening: function() {
                 utils.events.removeEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
                 utils.events.removeEvent(settings.element, utils.eventType('move'), action.drag.dragging);
                 utils.events.removeEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
             },
+
+            /**
+             * Fired immediately when the user begins to drag the content pane
+             * @param  {Object} e Event object
+             */
             startDrag: function(e) {
                 // No drag on ignored elements
                 var target = e.target ? e.target : e.srcElement,
@@ -148,6 +191,11 @@
                     }
                 };
             },
+
+            /**
+             * Fired while the user is moving the content pane
+             * @param  {Object} e Event object
+             */
             dragging: function(e) {
                 if (cache.isDragging && settings.touchToDrag) {
 
@@ -254,6 +302,11 @@
                     action.translate.x(translateTo + translated);
                 }
             },
+
+            /**
+             * Fired when the user releases the content pane
+             * @param  {Object} e Event object
+             */
             endDrag: function(e) {
                 if (cache.isDragging) {
                     utils.dispatchEvent('end');

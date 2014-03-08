@@ -6,6 +6,10 @@
     var settings = Snap.settings;
     var eventList = Snap.eventList;
 
+    /**
+     * Opens the specified side menu
+     * @param  {String} side Must be "left" or "right"
+     */
     Snap.prototype.open = function(side) {
         utils.dispatchEvent('open');
         utils.klass.remove(doc.body, 'snapjs-expand-left');
@@ -26,11 +30,18 @@
         }
     };
 
+    /**
+     * Closes the pane
+     */
     Snap.prototype.close = function() {
         utils.dispatchEvent('close');
         action.translate.easeTo(0);
     };
 
+    /**
+     * Hides the content pane completely allowing for full menu visibility
+     * @param  {String} side Must be "left" or "right"
+     */
     Snap.prototype.expand = function(side){
         var to = win.innerWidth || doc.documentElement.clientWidth;
 
@@ -47,31 +58,55 @@
         action.translate.easeTo(to);
     };
 
+    /**
+     * Listen in to custom Snap events
+     * @param  {String}   evt The snap event name
+     * @param  {Function} fn  Callback function
+     * @return {Object}       Snap instance
+     */
     Snap.prototype.on = function(evt, fn) {
         eventList[evt] = fn;
         return this;
     };
 
+    /**
+     * Stops listening to custom Snap events
+     * @param  {String} evt The snap event name
+     */
     Snap.prototype.off = function(evt) {
         if (eventList[evt]) {
             eventList[evt] = false;
         }
     };
 
+    /**
+     * Enables Snap.js events
+     */
     Snap.prototype.enable = function() {
         utils.dispatchEvent('enable');
         action.drag.listen();
     };
 
+    /**
+     * Disables Snap.js events
+     */
     Snap.prototype.disable = function() {
         utils.dispatchEvent('disable');
         action.drag.stopListening();
     };
 
+    /**
+     * Updates the instances settings
+     * @param  {Object} opts The Snap options to set
+     */
     Snap.prototype.settings = function(opts){
-        utils.deepExtend(settings, opts);
+        utils.extend(settings, opts);
     };
 
+    /**
+     * Returns information about the state of the content pane
+     * @return {Object} Information regarding the state of the pane
+     */
     Snap.prototype.state = function() {
         var state,
             fromLeft = action.translate.get.matrix(4);
