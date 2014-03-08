@@ -1,4 +1,4 @@
-# Snap.js
+# Snap.js v1.0
 A Library for creating beautiful mobile shelfs in Javascript
 
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank">View Video Preview</a>
@@ -99,7 +99,7 @@ settings = {
 * `minPosition`: Maximum number of pixels the pane may be slid to the left
 * `tapToClose`: If true, tapping an open pane will close it
 * `touchToDrag`: If true, dragging the target `settings.element` will open/close the pane
-* `minDragDistance`: The minimum amount of pixels the user needs to drag within the `slideIntent` degrees to move the pane 
+* `minDragDistance`: The minimum amount of pixels the user needs to drag within the `slideIntent` degrees to move the pane
 * `slideIntent`: The number of degrees the user must initiate sliding in towards the left or right (see diagram below)
 
 Notes on Slide Intent: The slide intent is an int between 0 and 90, and represents the degrees in the first quadrant of a circle that you would like to have mirrored on the X *and* Y axis. For example, if you have 40 set as your `slideIntent` value, the user would only be able to slide the pane by dragging in the blue area in the diagram below. Once intent has been defined, it will not change until the user releases.
@@ -202,7 +202,7 @@ The data returned from the `state` method will look like the following:
             percentage: 40.571649 // The percentage that the Pane is open. Good or animating other things
         }
     }
-} 
+}
 ```
 
 ## Gotchas
@@ -302,7 +302,7 @@ var doSnap = function(){
         window.snapper = new Snap({
             element: document.getElementById('content')
         });
-    } 
+    }
 };
 
 window.addEventListener('push', doSnap);

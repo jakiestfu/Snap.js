@@ -39,7 +39,8 @@ module.exports = function(grunt) {
                 src: [
                     'src/js/snap.js',
                     'src/js/utils.js',
-                    'src/js/*.js'
+                    'src/js/action.js',
+                    'src/js/api.js'
                 ],
                 dest: 'dist/latest/snap.js'
             }
