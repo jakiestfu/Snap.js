@@ -17,7 +17,7 @@
 		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="touch-icons/apple-touch-icon-57x57.png">
 
 		<!-- Include the base Snap.js CSS -->
-		<link rel="stylesheet" href="../../../snap.css">
+		<link rel="stylesheet" href="../../../dist/latest/snap.css">
 
 		<!-- Include the compiled Ratchet CSS -->
 		<link rel="stylesheet" href="ratchet.css">
@@ -42,7 +42,7 @@
 
 	</head>
 	<body>
-	
+
 	<div class="snap-drawers">
 		<div class="snap-drawer snap-drawer-left" id="left-drawer">
 			<ul class="list">
@@ -90,22 +90,22 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div id="content" class="snap-content">
-	
+
 		<!-- Make sure all your bars are the first things in your <body> -->
 		<header class="bar-title">
 			<button class="button" id="toggle-left">Left</button>
 			<h1 class="title">Ratchet</h1>
 			<button class="button" id="toggle-right">Right</button>
 		</header>
-	
+
 		<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
 		<div class="content">
 			<div class="content-padded">
 				<p class="welcome">Thanks for downloading Ratchet. This is an example HTML page that's linked up to compiled Ratchet CSS and JS, has the proper meta tags and the HTML structure. Need some more help before you start filling this with your own content? Check out some Ratchet resorces:</p>
 			</div>
-	
+
 			<ul class="list inset">
 				<li>
 					<a href="http://maker.github.com/ratchet/">
@@ -156,25 +156,25 @@
 					</a>
 				</li>
 			</ul>
-	
+
 		</div>
 	</div>
-	<script type="text/javascript" src="../../../snap.js"></script>
+	<script type="text/javascript" src="../../../dist/latest/snap.js"></script>
 	<script type="text/javascript">
-	
-		var 
-		
+
+		var
+
 		// Helper
 		$ = function(id){
 			return document.getElementById(id);
 		},
-		
+
 		// Instance
 		snapper = new Snap({
 			element: document.getElementById('content')
 		}),
-		
-		// 
+
+		//
 		UpdateDrawers = function(){
 			var state = snapper.state(),
 				towards = state.info.towards,
@@ -187,20 +187,20 @@
 				$('left-drawer').classList.add('active-drawer');
 			}
 		};
-		
+
 		snapper.on('drag', UpdateDrawers);
 		snapper.on('animating', UpdateDrawers);
 		snapper.on('animated', UpdateDrawers);
-		
+
 		$('toggle-left').addEventListener('click', function(){
 			snapper.open('left');
 		});
-		
+
 		$('toggle-right').addEventListener('click', function(){
 			snapper.open('right');
 		});
-		
+
 	</script>
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>		
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </body>
 </html>
