@@ -20,6 +20,7 @@
         minPosition: -266,
         tapToClose: true,
         touchToDrag: true,
+        clickToDrag: true,
         slideIntent: 40, // degrees
         minDragDistance: 5
     };
