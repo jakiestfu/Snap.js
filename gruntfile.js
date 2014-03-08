@@ -68,6 +68,17 @@ module.exports = function(grunt) {
 
         jshint: {
             all: ['src/js/*.js']
+        },
+
+        watch: {
+            css: {
+                files: 'src/css/*.scss',
+                tasks: ['sass', 'copy', 'dynamicWrites']
+            },
+            scripts: {
+                files: 'src/js/*.js',
+                tasks: ['jshint', 'concat', 'uglify', 'copy', 'dynamicWrites']
+            }
         }
     });
 
@@ -83,4 +94,5 @@ module.exports = function(grunt) {
     grunt.registerTask('dynamicWrites', 'Writes variables to static files', dynamicWrites);
 
     grunt.registerTask('default', ['jshint', 'sass', 'concat', 'uglify', 'copy', 'dynamicWrites']);
+    grunt.registerTask('develop', ['jshint', 'sass', 'concat', 'uglify', 'copy', 'dynamicWrites', 'watch']);
 };
