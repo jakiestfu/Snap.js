@@ -18,10 +18,12 @@ Snap.prototype.open = function(side) {
         action.translate.easeTo(settings.minPosition);
     }
 };
+
 Snap.prototype.close = function() {
     utils.dispatchEvent('close');
     action.translate.easeTo(0);
 };
+
 Snap.prototype.expand = function(side){
     var to = win.innerWidth || doc.documentElement.clientWidth;
 
@@ -42,6 +44,7 @@ Snap.prototype.on = function(evt, fn) {
     eventList[evt] = fn;
     return this;
 };
+
 Snap.prototype.off = function(evt) {
     if (eventList[evt]) {
         eventList[evt] = false;
@@ -52,6 +55,7 @@ Snap.prototype.enable = function() {
     utils.dispatchEvent('enable');
     action.drag.listen();
 };
+
 Snap.prototype.disable = function() {
     utils.dispatchEvent('disable');
     action.drag.stopListening();

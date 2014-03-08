@@ -1,8 +1,9 @@
 (function(win, doc) {
+
     'use strict';
 
     var Snap = function( userOpts ) {
-        return new Snap.init( userOpts );
+        return Snap.init( userOpts );
     };
 
     Snap.settings = {
