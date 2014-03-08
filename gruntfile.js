@@ -36,10 +36,12 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
+                    'src/js/_header.js',
                     'src/js/snap.js',
                     'src/js/utils.js',
                     'src/js/action.js',
-                    'src/js/api.js'
+                    'src/js/api.js',
+                    'src/js/_footer.js'
                 ],
                 dest: 'dist/latest/snap.js'
             }
@@ -67,7 +69,7 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            all: ['src/js/*.js']
+            all: ['dist/latest/snap.js']
         },
 
         watch: {
@@ -77,7 +79,7 @@ module.exports = function(grunt) {
             },
             scripts: {
                 files: 'src/js/*.js',
-                tasks: ['jshint', 'concat', 'uglify', 'copy', 'dynamicWrites']
+                tasks: ['concat', 'jshint', 'uglify', 'copy', 'dynamicWrites']
             }
         }
     });
@@ -93,6 +95,6 @@ module.exports = function(grunt) {
     // Register Everything
     grunt.registerTask('dynamicWrites', 'Writes variables to static files', dynamicWrites);
 
-    grunt.registerTask('default', ['jshint', 'sass', 'concat', 'uglify', 'copy', 'dynamicWrites']);
-    grunt.registerTask('develop', ['jshint', 'sass', 'concat', 'uglify', 'copy', 'dynamicWrites', 'watch']);
+    grunt.registerTask('default', ['sass', 'concat', 'jshint', 'copy', 'dynamicWrites']);
+    grunt.registerTask('develop', ['sass', 'concat', 'jshint', 'copy', 'dynamicWrites', 'watch']);
 };
