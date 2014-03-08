@@ -67,17 +67,7 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            all: ['src/js/*.js'],
-            options: {
-                curly: true,
-                eqnull: true,
-                browser: true,
-                globals: {
-                    jQuery: true,
-                    Thundercats: true,
-                    TC: true
-                },
-            },
+            all: ['src/js/*.js']
         }
     });
 

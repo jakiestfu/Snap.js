@@ -1,0 +1,8 @@
+{
+	"curly": true,
+    "eqnull": true,
+    "browser": true,
+    "globals": {
+        "Snap": true
+    }
+}
