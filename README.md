@@ -1,4 +1,4 @@
-# Snap.js v1.0
+# Snap.js v2.0.0-rc1 [![Build Status](https://travis-ci.org/jakiestfu/Snap.js.png?branch=v2.0)](https://travis-ci.org/jakiestfu/Snap.js)
 A Library for creating beautiful mobile shelfs in Javascript
 
 <a href="http://www.screenr.com/embed/0EJ7" target="_blank">View Video Preview</a>
