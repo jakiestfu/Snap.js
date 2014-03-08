@@ -9,7 +9,7 @@
             get: {
                 matrix: function(index) {
 
-                    if( !utils.canTransform() ){
+                    if( !cache.canTransform ){
                         return parseInt(settings.element.style.left, 10);
                     } else {
                         var matrix = win.getComputedStyle(settings.element)[cache.vendor+'Transform'].match(/\((.*)\)/),
@@ -41,7 +41,7 @@
             },
             easeTo: function(n) {
 
-                if( !utils.canTransform() ){
+                if( !cache.canTransform ){
                     cache.translation = n;
                     action.translate.x(n);
                 } else {
@@ -79,7 +79,7 @@
                     n = 0;
                 }
 
-                if( utils.canTransform() ){
+                if( cache.canTransform ){
                     var theTranslate = 'translate3d(' + n + 'px, 0,0)';
                     settings.element.style[cache.vendor+'Transform'] = theTranslate;
                 } else {

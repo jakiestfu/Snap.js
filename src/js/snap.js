@@ -44,6 +44,7 @@
         if (opts.element) {
             Snap.utils.extend(Snap.settings, opts);
             Snap.cache.vendor = Snap.utils.vendor();
+            Snap.cache.canTransform = Snap.utils.canTransform();
             Snap.action.drag.listen();
         }
     };
