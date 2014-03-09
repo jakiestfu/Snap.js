@@ -36,12 +36,10 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-                    'src/js/_header.js',
                     'src/js/snap.js',
                     'src/js/utils.js',
                     'src/js/action.js',
-                    'src/js/api.js',
-                    'src/js/_footer.js'
+                    'src/js/api.js'
                 ],
                 dest: 'dist/latest/snap.js'
             }

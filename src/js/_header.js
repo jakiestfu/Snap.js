@@ -1,1 +1,0 @@
-(function(win, doc) {
