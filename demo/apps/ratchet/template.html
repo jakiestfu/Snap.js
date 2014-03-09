@@ -1,206 +1,206 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Ratchet template page</title>
+    <head>
+        <meta charset="utf-8">
+        <title>Ratchet template page</title>
 
-		<!-- Sets initial viewport load and disables zooming	-->
-		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- Sets initial viewport load and disables zooming    -->
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
 
-		<!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-		<!-- Set Apple icons for when prototype is saved to home screen -->
-		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="touch-icons/apple-touch-icon-114x114.png">
-		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="touch-icons/apple-touch-icon-72x72.png">
-		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="touch-icons/apple-touch-icon-57x57.png">
+        <!-- Set Apple icons for when prototype is saved to home screen -->
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="touch-icons/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="touch-icons/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="touch-icons/apple-touch-icon-57x57.png">
 
-		<!-- Include the base Snap.js CSS -->
-		<link rel="stylesheet" href="../../../dist/latest/snap.css">
+        <!-- Include the base Snap.js CSS -->
+        <link rel="stylesheet" href="../../../dist/latest/snap.css">
 
-		<!-- Include the compiled Ratchet CSS -->
-		<link rel="stylesheet" href="ratchet.css">
+        <!-- Include the compiled Ratchet CSS -->
+        <link rel="stylesheet" href="ratchet.css">
 
-		<!-- Include the compiled Ratchet JS -->
-		<script src="ratchet.js"></script>
+        <!-- Include the compiled Ratchet JS -->
+        <script src="ratchet.js"></script>
 
-		<!-- Intro paragraph styles. Delete once you start using this page -->
-		<style type="text/css">
-			.snap-drawers .list{margin: 0;}
+        <!-- Intro paragraph styles. Delete once you start using this page -->
+        <style type="text/css">
+            .snap-drawers .list{margin: 0;}
 
-			.welcome {
-				line-height: 1.5;
-				color: #555;
-			}
-			h2{
-				padding: 15px;
-				font-weight: normal;
-				font-size: 36px;
-			}
-		</style>
+            .welcome {
+                line-height: 1.5;
+                color: #555;
+            }
+            h2{
+                padding: 15px;
+                font-weight: normal;
+                font-size: 36px;
+            }
+        </style>
 
-	</head>
-	<body>
+    </head>
+    <body>
 
-	<div class="snap-drawers">
-		<div class="snap-drawer snap-drawer-left" id="left-drawer">
-			<ul class="list">
+    <div class="snap-drawers">
+        <div class="snap-drawer snap-drawer-left" id="left-drawer">
+            <ul class="list">
               <h2>Snap.js</h2>
-			  <li class="list-divider">Share</li>
-			  <li>
-			  	<div class="demo-social">
-        		  <iframe src="http://ghbtns.com/github-btn.html?user=jakiestfu&amp;repo=Snap.js&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
-				</div>
-			  </li>
-			  <li class="list-divider">Demos</li>
-			  <li><a href="../default.html" data-ignore="push">Default</a></li>
-			  <li><a href="../noDrag.html" data-ignore="push">No Drag</a></li>
-			  <li><a href="../rightDisabled.html" data-ignore="push">Right Disabled</a></li>
-			  <li><a href="../skinnyThreshold.html" data-ignore="push">Skinny Threshold</a></li>
-			  <li><a href="../toggles.html" data-ignore="push">Toggles</a></li>
-			  <li><a href="../classNames.html" data-ignore="push">Class Names</a></li>
-	          <li><a href="../expand.html" data-ignore="push">Expanding</a></li>
-	          <li><a href="../settings.html" data-ignore="push">Settings</a></li>
-			  <li><a href="template.html" data-ignore="push">Ratchet</a></li>
-			</ul>
-		</div>
-		<div class="snap-drawer snap-drawer-right" id="right-drawer">
-			<ul class="list">
-			  <li>List item 1 <span class="chevron"></span></li>
-			  <li>List item 2 <span class="chevron"></span></li>
-			  <li>List item 3 <span class="chevron"></span></li>
-			  <li>List item 4 <span class="chevron"></span></li>
-			  <li>List item 5 <span class="chevron"></span></li>
-			  <li>List item 6 <span class="chevron"></span></li>
-			  <li>List item 7 <span class="chevron"></span></li>
-			  <li>List item 8 <span class="chevron"></span></li>
-			  <li>List item 9 <span class="chevron"></span></li>
-			  <li>List item 10 <span class="chevron"></span></li>
-			  <li>List item 1 <span class="chevron"></span></li>
-			  <li>List item 12 <span class="chevron"></span></li>
-			  <li>List item 13 <span class="chevron"></span></li>
-			  <li>List item 14 <span class="chevron"></span></li>
-			  <li>List item 15 <span class="chevron"></span></li>
-			  <li>List item 16 <span class="chevron"></span></li>
-			  <li>List item 17 <span class="chevron"></span></li>
-			  <li>List item 18 <span class="chevron"></span></li>
-			  <li>List item 19 <span class="chevron"></span></li>
-			  <li>List item 20 <span class="chevron"></span></li>
-			</ul>
-		</div>
-	</div>
+              <li class="list-divider">Share</li>
+              <li>
+                  <div class="demo-social">
+                  <iframe src="http://ghbtns.com/github-btn.html?user=jakiestfu&amp;repo=Snap.js&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
+                </div>
+              </li>
+              <li class="list-divider">Demos</li>
+              <li><a href="../default.html" data-ignore="push">Default</a></li>
+              <li><a href="../noDrag.html" data-ignore="push">No Drag</a></li>
+              <li><a href="../rightDisabled.html" data-ignore="push">Right Disabled</a></li>
+              <li><a href="../skinnyThreshold.html" data-ignore="push">Skinny Threshold</a></li>
+              <li><a href="../toggles.html" data-ignore="push">Toggles</a></li>
+              <li><a href="../classNames.html" data-ignore="push">Class Names</a></li>
+              <li><a href="../expand.html" data-ignore="push">Expanding</a></li>
+              <li><a href="../settings.html" data-ignore="push">Settings</a></li>
+              <li><a href="template.html" data-ignore="push">Ratchet</a></li>
+            </ul>
+        </div>
+        <div class="snap-drawer snap-drawer-right" id="right-drawer">
+            <ul class="list">
+              <li>List item 1 <span class="chevron"></span></li>
+              <li>List item 2 <span class="chevron"></span></li>
+              <li>List item 3 <span class="chevron"></span></li>
+              <li>List item 4 <span class="chevron"></span></li>
+              <li>List item 5 <span class="chevron"></span></li>
+              <li>List item 6 <span class="chevron"></span></li>
+              <li>List item 7 <span class="chevron"></span></li>
+              <li>List item 8 <span class="chevron"></span></li>
+              <li>List item 9 <span class="chevron"></span></li>
+              <li>List item 10 <span class="chevron"></span></li>
+              <li>List item 1 <span class="chevron"></span></li>
+              <li>List item 12 <span class="chevron"></span></li>
+              <li>List item 13 <span class="chevron"></span></li>
+              <li>List item 14 <span class="chevron"></span></li>
+              <li>List item 15 <span class="chevron"></span></li>
+              <li>List item 16 <span class="chevron"></span></li>
+              <li>List item 17 <span class="chevron"></span></li>
+              <li>List item 18 <span class="chevron"></span></li>
+              <li>List item 19 <span class="chevron"></span></li>
+              <li>List item 20 <span class="chevron"></span></li>
+            </ul>
+        </div>
+    </div>
 
-	<div id="content" class="snap-content">
+    <div id="content" class="snap-content">
 
-		<!-- Make sure all your bars are the first things in your <body> -->
-		<header class="bar-title">
-			<button class="button" id="toggle-left">Left</button>
-			<h1 class="title">Ratchet</h1>
-			<button class="button" id="toggle-right">Right</button>
-		</header>
+        <!-- Make sure all your bars are the first things in your <body> -->
+        <header class="bar-title">
+            <button class="button" id="toggle-left">Left</button>
+            <h1 class="title">Ratchet</h1>
+            <button class="button" id="toggle-right">Right</button>
+        </header>
 
-		<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
-		<div class="content">
-			<div class="content-padded">
-				<p class="welcome">Thanks for downloading Ratchet. This is an example HTML page that's linked up to compiled Ratchet CSS and JS, has the proper meta tags and the HTML structure. Need some more help before you start filling this with your own content? Check out some Ratchet resorces:</p>
-			</div>
+        <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
+        <div class="content">
+            <div class="content-padded">
+                <p class="welcome">Thanks for downloading Ratchet. This is an example HTML page that's linked up to compiled Ratchet CSS and JS, has the proper meta tags and the HTML structure. Need some more help before you start filling this with your own content? Check out some Ratchet resorces:</p>
+            </div>
 
-			<ul class="list inset">
-				<li>
-					<a href="http://maker.github.com/ratchet/">
-						<strong>Ratchet documentation</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-				<li>
-					<a href="http://www.github.com/maker/ratchet/">
-						<strong>Ratchet on Github</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-				<li>
-					<a href="https://groups.google.com/forum/#!forum/goratchet">
-						<strong>Ratchet Google group</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-				<li>
-					<a href="http://www.twitter.com/GoRatchet">
-						<strong>Ratchet on Twitter</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-				<li>
-					<a href="http://maker.github.com/ratchet/">
-						<strong>Ratchet documentation</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-				<li>
-					<a href="http://www.github.com/maker/ratchet/">
-						<strong>Ratchet on Github</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-				<li>
-					<a href="https://groups.google.com/forum/#!forum/goratchet">
-						<strong>Ratchet Google group</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-				<li>
-					<a href="http://www.twitter.com/GoRatchet">
-						<strong>Ratchet on Twitter</strong>
-						<span class="chevron"></span>
-					</a>
-				</li>
-			</ul>
+            <ul class="list inset">
+                <li>
+                    <a href="http://maker.github.com/ratchet/">
+                        <strong>Ratchet documentation</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.github.com/maker/ratchet/">
+                        <strong>Ratchet on Github</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://groups.google.com/forum/#!forum/goratchet">
+                        <strong>Ratchet Google group</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.twitter.com/GoRatchet">
+                        <strong>Ratchet on Twitter</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://maker.github.com/ratchet/">
+                        <strong>Ratchet documentation</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.github.com/maker/ratchet/">
+                        <strong>Ratchet on Github</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://groups.google.com/forum/#!forum/goratchet">
+                        <strong>Ratchet Google group</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.twitter.com/GoRatchet">
+                        <strong>Ratchet on Twitter</strong>
+                        <span class="chevron"></span>
+                    </a>
+                </li>
+            </ul>
 
-		</div>
-	</div>
-	<script type="text/javascript" src="../../../dist/latest/snap.js"></script>
-	<script type="text/javascript">
+        </div>
+    </div>
+    <script type="text/javascript" src="../../../dist/latest/snap.js"></script>
+    <script type="text/javascript">
 
-		var
+        var
 
-		// Helper
-		$ = function(id){
-			return document.getElementById(id);
-		},
+        // Helper
+        $ = function(id){
+            return document.getElementById(id);
+        },
 
-		// Instance
-		snapper = new Snap({
-			element: document.getElementById('content')
-		}),
+        // Instance
+        snapper = new Snap({
+            element: document.getElementById('content')
+        }),
 
-		//
-		UpdateDrawers = function(){
-			var state = snapper.state(),
-				towards = state.info.towards,
-				opening = state.info.opening;
-			if(opening=='right' && towards=='left'){
-				$('right-drawer').classList.add('active-drawer');
-				$('left-drawer').classList.remove('active-drawer');
-			} else if(opening=='left' && towards=='right') {
-				$('right-drawer').classList.remove('active-drawer');
-				$('left-drawer').classList.add('active-drawer');
-			}
-		};
+        //
+        UpdateDrawers = function(){
+            var state = snapper.state(),
+                towards = state.info.towards,
+                opening = state.info.opening;
+            if(opening=='right' && towards=='left'){
+                $('right-drawer').classList.add('active-drawer');
+                $('left-drawer').classList.remove('active-drawer');
+            } else if(opening=='left' && towards=='right') {
+                $('right-drawer').classList.remove('active-drawer');
+                $('left-drawer').classList.add('active-drawer');
+            }
+        };
 
-		snapper.on('drag', UpdateDrawers);
-		snapper.on('animating', UpdateDrawers);
-		snapper.on('animated', UpdateDrawers);
+        snapper.on('drag', UpdateDrawers);
+        snapper.on('animating', UpdateDrawers);
+        snapper.on('animated', UpdateDrawers);
 
-		$('toggle-left').addEventListener('click', function(){
-			snapper.open('left');
-		});
+        $('toggle-left').addEventListener('click', function(){
+            snapper.open('left');
+        });
 
-		$('toggle-right').addEventListener('click', function(){
-			snapper.open('right');
-		});
+        $('toggle-right').addEventListener('click', function(){
+            snapper.open('right');
+        });
 
-	</script>
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </body>
 </html>
