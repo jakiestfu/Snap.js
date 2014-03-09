@@ -63,7 +63,7 @@ module.exports = function(grunt) {
             },
             main: {
                 files: {
-                    'dist/latest/snap.js': ['dist/latest/snap.js']
+                    'dist/latest/snap.min.js': ['dist/latest/snap.js']
                 }
             }
         },

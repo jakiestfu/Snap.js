@@ -1,2 +1,761 @@
 /*! Snap.js v2.0.0-rc1 */
-(function(a,b){"use strict";var c=this,d=function(a){a.element&&(d.utils.extend(d.settings,a),d.cache.vendor=d.utils.vendor(),d.cache.canTransform=d.utils.canTransform(),d.action.drag.listen())},e=d.settings={element:null,dragger:null,disable:"none",addBodyClasses:!0,hyperextensible:!0,resistance:.5,flickThreshold:50,transitionSpeed:.3,easing:"ease",maxPosition:266,minPosition:-266,tapToClose:!0,touchToDrag:!0,clickToDrag:!0,slideIntent:40,minDragDistance:5},f=d.cache={simpleStates:{opening:null,towards:null,hyperExtending:null,halfway:null,flick:null,translation:{absolute:0,relative:0,sinceDirectionChange:0,percentage:0}}};c.Snap=d;var g=d.eventList={},h=d.utils={hasTouch:"ontouchstart"in b.documentElement||a.navigator.msPointerEnabled,eventType:function(a){var b={down:h.hasTouch?"touchstart":e.clickToDrag?"mousedown":"",move:h.hasTouch?"touchmove":e.clickToDrag?"mousemove":"",up:h.hasTouch?"touchend":e.clickToDrag?"mouseup":"",out:h.hasTouch?"touchcancel":e.clickToDrag?"mouseout":""};return b[a]},page:function(a,b){return h.hasTouch&&b.touches.length&&b.touches[0]?b.touches[0]["page"+a]:b["page"+a]},klass:{has:function(a,b){return-1!==a.className.indexOf(b)},add:function(a,b){!h.klass.has(a,b)&&e.addBodyClasses&&(a.className+=" "+b)},remove:function(a,b){h.klass.has(a,b)&&e.addBodyClasses&&(a.className=a.className.replace(b,"").replace(/^\s+|\s+$/g,""))}},dispatchEvent:function(a){return"function"==typeof g[a]?g[a].call():void 0},vendor:function(){var a,c=b.createElement("div"),d="webkit Moz O ms".split(" ");for(a in d)if("undefined"!=typeof c.style[d[a]+"Transition"])return d[a]},transitionCallback:function(){return"Moz"===f.vendor||"ms"===f.vendor?"transitionend":f.vendor+"TransitionEnd"},canTransform:function(){return"undefined"!=typeof e.element.style[f.vendor+"Transform"]},extend:function(a,b){var c;for(c in b)b[c]&&b[c].constructor&&b[c].constructor===Object?(a[c]=a[c]||{},h.extend(a[c],b[c])):a[c]=b[c];return a},angleOfDrag:function(a,b){var c,d;return d=Math.atan2(-(f.startDragY-b),f.startDragX-a),0>d&&(d+=2*Math.PI),c=Math.floor(d*(180/Math.PI)-180),0>c&&c>-180&&(c=360-Math.abs(c)),Math.abs(c)},events:{addEvent:function(a,b,c){return a.addEventListener?a.addEventListener(b,c,!1):a.attachEvent?a.attachEvent("on"+b,c):void 0},removeEvent:function(a,b,c){return a.addEventListener?a.removeEventListener(b,c,!1):a.attachEvent?a.detachEvent("on"+b,c):void 0},prevent:function(a){a.preventDefault?a.preventDefault():a.returnValue=!1}},parentUntil:function(a,b){for(var c="string"==typeof b;a.parentNode;){if(c&&a.getAttribute&&a.getAttribute(b))return a;if(!c&&a===b)return a;a=a.parentNode}return null}},i=d.action={translate:{get:{matrix:function(b){if(f.canTransform){var c=a.getComputedStyle(e.element)[f.vendor+"Transform"].match(/\((.*)\)/),d=8;return c?(c=c[1].split(","),16===c.length&&(b+=d),parseInt(c[b],10)):0}return parseInt(e.element.style.left,10)}},easeCallback:function(){e.element.style[f.vendor+"Transition"]="",f.translation=i.translate.get.matrix(4),f.easing=!1,0===f.easingTo&&(h.klass.remove(b.body,"snapjs-right"),h.klass.remove(b.body,"snapjs-left")),h.dispatchEvent("animated"),h.events.removeEvent(e.element,h.transitionCallback(),i.translate.easeCallback)},easeTo:function(a){f.canTransform?(f.easing=!0,f.easingTo=a,e.element.style[f.vendor+"Transition"]="all "+e.transitionSpeed+"s "+e.easing,h.events.addEvent(e.element,h.transitionCallback(),i.translate.easeCallback),i.translate.x(a)):(f.translation=a,i.translate.x(a)),0===a&&(e.element.style[f.vendor+"Transform"]="")},x:function(c){if(!("left"===e.disable&&c>0||"right"===e.disable&&0>c))if(e.hyperextensible||(c===e.maxPosition||c>e.maxPosition?c=e.maxPosition:(c===e.minPosition||c<e.minPosition)&&(c=e.minPosition)),c=parseInt(c,10),isNaN(c)&&(c=0),f.canTransform){var d="translate3d("+c+"px, 0,0)";e.element.style[f.vendor+"Transform"]=d}else e.element.style.width=(a.innerWidth||b.documentElement.clientWidth)+"px",e.element.style.left=c+"px",e.element.style.right=""}},drag:{listen:function(){f.translation=0,f.easing=!1,h.events.addEvent(e.element,h.eventType("down"),i.drag.startDrag),h.events.addEvent(e.element,h.eventType("move"),i.drag.dragging),h.events.addEvent(e.element,h.eventType("up"),i.drag.endDrag)},stopListening:function(){h.events.removeEvent(e.element,h.eventType("down"),i.drag.startDrag),h.events.removeEvent(e.element,h.eventType("move"),i.drag.dragging),h.events.removeEvent(e.element,h.eventType("up"),i.drag.endDrag)},startDrag:function(a){var b=a.target?a.target:a.srcElement,c=h.parentUntil(b,"data-snap-ignore");if(c)return void h.dispatchEvent("ignore");if(e.dragger){var d=h.parentUntil(b,e.dragger);if(!d&&f.translation!==e.minPosition&&f.translation!==e.maxPosition)return}h.dispatchEvent("start"),e.element.style[f.vendor+"Transition"]="",f.isDragging=!0,f.hasIntent=null,f.intentChecked=!1,f.startDragX=h.page("X",a),f.startDragY=h.page("Y",a),f.dragWatchers={current:0,last:0,hold:0,state:""},f.simpleStates={opening:null,towards:null,hyperExtending:null,halfway:null,flick:null,translation:{absolute:0,relative:0,sinceDirectionChange:0,percentage:0}}},dragging:function(a){if(f.isDragging&&e.touchToDrag){var c,d=h.page("X",a),g=h.page("Y",a),j=f.translation,k=i.translate.get.matrix(4),l=d-f.startDragX,m=k>0,n=l;if(f.intentChecked&&!f.hasIntent)return;if(e.addBodyClasses&&(k>0?(h.klass.add(b.body,"snapjs-left"),h.klass.remove(b.body,"snapjs-right")):0>k&&(h.klass.add(b.body,"snapjs-right"),h.klass.remove(b.body,"snapjs-left"))),f.hasIntent===!1||null===f.hasIntent){var o=h.angleOfDrag(d,g),p=o>=0&&o<=e.slideIntent||360>=o&&o>360-e.slideIntent,q=o>=180&&o<=180+e.slideIntent||180>=o&&o>=180-e.slideIntent;f.hasIntent=q||p?!0:!1,f.intentChecked=!0}if(e.minDragDistance>=Math.abs(d-f.startDragX)||f.hasIntent===!1)return;h.events.prevent(a),h.dispatchEvent("drag"),f.dragWatchers.current=d,f.dragWatchers.last>d?("left"!==f.dragWatchers.state&&(f.dragWatchers.state="left",f.dragWatchers.hold=d),f.dragWatchers.last=d):f.dragWatchers.last<d&&("right"!==f.dragWatchers.state&&(f.dragWatchers.state="right",f.dragWatchers.hold=d),f.dragWatchers.last=d),m?(e.maxPosition<k&&(c=(k-e.maxPosition)*e.resistance,n=l-c),f.simpleStates={opening:"left",towards:f.dragWatchers.state,hyperExtending:e.maxPosition<k,halfway:k>e.maxPosition/2,flick:Math.abs(f.dragWatchers.current-f.dragWatchers.hold)>e.flickThreshold,translation:{absolute:k,relative:l,sinceDirectionChange:f.dragWatchers.current-f.dragWatchers.hold,percentage:k/e.maxPosition*100}}):(e.minPosition>k&&(c=(k-e.minPosition)*e.resistance,n=l-c),f.simpleStates={opening:"right",towards:f.dragWatchers.state,hyperExtending:e.minPosition>k,halfway:k<e.minPosition/2,flick:Math.abs(f.dragWatchers.current-f.dragWatchers.hold)>e.flickThreshold,translation:{absolute:k,relative:l,sinceDirectionChange:f.dragWatchers.current-f.dragWatchers.hold,percentage:k/e.minPosition*100}}),i.translate.x(n+j)}},endDrag:function(a){if(f.isDragging){h.dispatchEvent("end");var b=i.translate.get.matrix(4);if(0===f.dragWatchers.current&&0!==b&&e.tapToClose)return h.dispatchEvent("close"),h.events.prevent(a),i.translate.easeTo(0),f.isDragging=!1,void(f.startDragX=0);"left"===f.simpleStates.opening?f.simpleStates.halfway||f.simpleStates.hyperExtending||f.simpleStates.flick?f.simpleStates.flick&&"left"===f.simpleStates.towards?i.translate.easeTo(0):(f.simpleStates.flick&&"right"===f.simpleStates.towards||f.simpleStates.halfway||f.simpleStates.hyperExtending)&&i.translate.easeTo(e.maxPosition):i.translate.easeTo(0):"right"===f.simpleStates.opening&&(f.simpleStates.halfway||f.simpleStates.hyperExtending||f.simpleStates.flick?f.simpleStates.flick&&"right"===f.simpleStates.towards?i.translate.easeTo(0):(f.simpleStates.flick&&"left"===f.simpleStates.towards||f.simpleStates.halfway||f.simpleStates.hyperExtending)&&i.translate.easeTo(e.minPosition):i.translate.easeTo(0)),f.isDragging=!1,f.startDragX=h.page("X",a)}}}};d.prototype.open=function(a){h.dispatchEvent("open"),h.klass.remove(b.body,"snapjs-expand-left"),h.klass.remove(b.body,"snapjs-expand-right"),"left"===a?(f.simpleStates.opening="left",f.simpleStates.towards="right",h.klass.add(b.body,"snapjs-left"),h.klass.remove(b.body,"snapjs-right"),i.translate.easeTo(e.maxPosition)):"right"===a&&(f.simpleStates.opening="right",f.simpleStates.towards="left",h.klass.remove(b.body,"snapjs-left"),h.klass.add(b.body,"snapjs-right"),i.translate.easeTo(e.minPosition))},d.prototype.close=function(){h.dispatchEvent("close"),i.translate.easeTo(0)},d.prototype.expand=function(c){var d=a.innerWidth||b.documentElement.clientWidth;"left"===c?(h.dispatchEvent("expandLeft"),h.klass.add(b.body,"snapjs-expand-left"),h.klass.remove(b.body,"snapjs-expand-right")):(h.dispatchEvent("expandRight"),h.klass.add(b.body,"snapjs-expand-right"),h.klass.remove(b.body,"snapjs-expand-left"),d*=-1),i.translate.easeTo(d)},d.prototype.on=function(a,b){return g[a]=b,this},d.prototype.off=function(a){g[a]&&(g[a]=!1)},d.prototype.enable=function(){h.dispatchEvent("enable"),i.drag.listen()},d.prototype.disable=function(){h.dispatchEvent("disable"),i.drag.stopListening()},d.prototype.settings=function(a){h.extend(e,a)},d.prototype.state=function(){var a,b=i.translate.get.matrix(4);return a=b===e.maxPosition?"left":b===e.minPosition?"right":"closed",{state:a,info:f.simpleStates}}}).call(this,window,document);
+(function(win, doc) {
+
+
+'use strict';
+
+// window object
+var self = this;
+
+/**
+ * Our Snap global that initializes our instance
+ * @param {Object} opts The custom Snap.js options
+ */
+var Snap = function( opts ) {
+    if (opts.element) {
+        Snap.utils.extend(Snap.settings, opts);
+        Snap.cache.vendor = Snap.utils.vendor();
+        Snap.cache.canTransform = Snap.utils.canTransform();
+        Snap.action.drag.listen();
+    }
+};
+
+/**
+ * Our default settings for a Snap instance
+ * @type {Object}
+ */
+var settings = Snap.settings = {
+    element: null,
+    dragger: null,
+    disable: 'none',
+    addBodyClasses: true,
+    hyperextensible: true,
+    resistance: 0.5,
+    flickThreshold: 50,
+    transitionSpeed: 0.3,
+    easing: 'ease',
+    maxPosition: 266,
+    minPosition: -266,
+    tapToClose: true,
+    touchToDrag: true,
+    clickToDrag: true,
+    slideIntent: 40, // degrees
+    minDragDistance: 5
+};
+
+/**
+ * Stores internally global data
+ * @type {Object}
+ */
+var cache = Snap.cache = {
+    simpleStates: {
+        opening: null,
+        towards: null,
+        hyperExtending: null,
+        halfway: null,
+        flick: null,
+        translation: {
+            absolute: 0,
+            relative: 0,
+            sinceDirectionChange: 0,
+            percentage: 0
+        }
+    }
+};
+
+self.Snap = Snap;
+
+
+var eventList = Snap.eventList = {};
+
+var utils = Snap.utils = {
+
+    /**
+     * Determines if we are interacting with a touch device
+     * @type {Boolean}
+     */
+    hasTouch: ('ontouchstart' in doc.documentElement || win.navigator.msPointerEnabled),
+
+    /**
+     * Returns the appropriate event type based on whether we are a touch device or not
+     * @param  {String} action The "action" event you're looking for: up, down, move, out
+     * @return {String}        The browsers supported event name
+     */
+    eventType: function(action) {
+        var eventTypes = {
+            down: (utils.hasTouch ? 'touchstart' : settings.clickToDrag ? 'mousedown' : ''),
+            move: (utils.hasTouch ? 'touchmove' : settings.clickToDrag ? 'mousemove' : ''),
+            up: (utils.hasTouch ? 'touchend' : settings.clickToDrag ? 'mouseup': ''),
+            out: (utils.hasTouch ? 'touchcancel' : settings.clickToDrag ? 'mouseout' : '')
+        };
+        return eventTypes[action];
+    },
+
+    /**
+     * Returns the correct "cursor" position on both browser and mobile
+     * @param  {String} t The coordinate to retrieve, either "X" or "Y"
+     * @param  {Object} e The event object being triggered
+     * @return {Number}   The desired coordiante for the events interaction
+     */
+    page: function(t, e){
+        return (utils.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0]['page'+t] : e['page'+t];
+    },
+
+
+    klass: {
+
+        /**
+         * Checks if an element has a class name
+         * @param  {Object}  el   The element to check
+         * @param  {String}  name The class name to search for
+         * @return {Boolean}      Returns true if the class exists
+         */
+        has: function(el, name){
+            return (el.className).indexOf(name) !== -1;
+        },
+
+        /**
+         * Adds a class name to an element
+         * @param  {Object}  el   The element to add to
+         * @param  {String}  name The class name to add
+         */
+        add: function(el, name){
+            if(!utils.klass.has(el, name) && settings.addBodyClasses){
+                el.className += " "+name;
+            }
+        },
+
+        /**
+         * Removes a class name
+         * @param  {Object} el   The element to remove from
+         * @param  {String} name The class name to remove
+         */
+        remove: function(el, name){
+            if(utils.klass.has(el, name) && settings.addBodyClasses){
+                el.className = (el.className).replace(name, "").replace(/^\s+|\s+$/g, '');
+            }
+        }
+    },
+
+    /**
+     * Dispatch a custom Snap.js event
+     * @param  {String} type The event name
+     */
+    dispatchEvent: function(type) {
+        if (typeof eventList[type] === 'function') {
+            return eventList[type].call();
+        }
+    },
+
+    /**
+     * Determines the browsers vendor prefix for CSS3
+     * @return {String} The browsers vendor prefix
+     */
+    vendor: function(){
+        var tmp = doc.createElement("div"),
+            prefixes = 'webkit Moz O ms'.split(' '),
+            i;
+        for (i in prefixes) {
+            if (typeof tmp.style[prefixes[i] + 'Transition'] !== 'undefined') {
+                return prefixes[i];
+            }
+        }
+    },
+
+    /**
+     * Determines the browsers vendor prefix for transition callback events
+     * @return {String} The event name
+     */
+    transitionCallback: function(){
+        return (cache.vendor==='Moz' || cache.vendor==='ms') ? 'transitionend' : cache.vendor+'TransitionEnd';
+    },
+
+    /**
+     * Determines if the users browser supports CSS3 transformations
+     * @return {[type]} [description]
+     */
+    canTransform: function(){
+        return typeof settings.element.style[cache.vendor+'Transform'] !== 'undefined';
+    },
+
+    /**
+     * Deeply extends two objects
+     * @param  {Object} destination The destination object
+     * @param  {Object} source      The custom options to extend destination by
+     * @return {Object}             The desination object
+     */
+    extend: function(destination, source) {
+        var property;
+        for (property in source) {
+            if (source[property] && source[property].constructor && source[property].constructor === Object) {
+                destination[property] = destination[property] || {};
+                utils.extend(destination[property], source[property]);
+            } else {
+                destination[property] = source[property];
+            }
+        }
+        return destination;
+    },
+
+    /**
+     * Determines an angle between two points
+     * @param  {Number} x The X coordinate
+     * @param  {Number} y The Y coordinate
+     * @return {Number}   The number of degrees between the two points
+     */
+    angleOfDrag: function(x, y) {
+        var degrees, theta;
+        // Calc Theta
+        theta = Math.atan2(-(cache.startDragY - y), (cache.startDragX - x));
+        if (theta < 0) {
+            theta += 2 * Math.PI;
+        }
+        // Calc Degrees
+        degrees = Math.floor(theta * (180 / Math.PI) - 180);
+        if (degrees < 0 && degrees > -180) {
+            degrees = 360 - Math.abs(degrees);
+        }
+        return Math.abs(degrees);
+    },
+
+
+    events: {
+
+        /**
+         * Adds an event to an element
+         * @param {Object} element   Element to add event to
+         * @param {String} eventName The event name
+         * @param {Function} func      Callback function
+         */
+        addEvent: function addEvent(element, eventName, func) {
+            if (element.addEventListener) {
+                return element.addEventListener(eventName, func, false);
+            } else if (element.attachEvent) {
+                return element.attachEvent("on" + eventName, func);
+            }
+        },
+
+        /**
+         * Removes an event to an element
+         * @param {Object} element   Element to remove event from
+         * @param {String} eventName The event name
+         * @param {Function} func      Callback function
+         */
+        removeEvent: function addEvent(element, eventName, func) {
+            if (element.addEventListener) {
+                return element.removeEventListener(eventName, func, false);
+            } else if (element.attachEvent) {
+                return element.detachEvent("on" + eventName, func);
+            }
+        },
+
+        /**
+         * Prevents the default event
+         * @param  {Object} e The event object
+         */
+        prevent: function(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            } else {
+                e.returnValue = false;
+            }
+        }
+    },
+
+    /**
+     * Searches the parent element until a specified attribute has been matched
+     * @param  {Object} el   The element to search from
+     * @param  {String} attr The attribute to search for
+     * @return {Object|null}      Returns a matched element if it exists, else, null
+     */
+    parentUntil: function(el, attr) {
+        var isStr = typeof attr === 'string';
+        while (el.parentNode) {
+            if (isStr && el.getAttribute && el.getAttribute(attr)){
+                return el;
+            } else if(!isStr && el === attr){
+                return el;
+            }
+            el = el.parentNode;
+        }
+        return null;
+    }
+};
+
+
+var action = Snap.action = {
+
+    /**
+     * Handles translating the elements position
+     * @type {Object}
+     */
+    translate: {
+        get: {
+
+            /**
+             * Returns the amount an element is translated
+             * @param  {Number} index The index desired from the CSS3 values of translate3d
+             * @return {Number}       The amount of pixels an element is translated
+             */
+            matrix: function(index) {
+
+                if( !cache.canTransform ){
+                    return parseInt(settings.element.style.left, 10);
+                } else {
+                    var matrix = win.getComputedStyle(settings.element)[cache.vendor+'Transform'].match(/\((.*)\)/),
+                        ieOffset = 8;
+                    if (matrix) {
+                        matrix = matrix[1].split(',');
+                        if(matrix.length===16){
+                            index+=ieOffset;
+                        }
+                        return parseInt(matrix[index], 10);
+                    }
+                    return 0;
+                }
+            }
+        },
+
+        /**
+         * Called when the element has finished transitioning
+         */
+        easeCallback: function(){
+            settings.element.style[cache.vendor+'Transition'] = '';
+            cache.translation = action.translate.get.matrix(4);
+            cache.easing = false;
+
+            if(cache.easingTo===0){
+                utils.klass.remove(doc.body, 'snapjs-right');
+                utils.klass.remove(doc.body, 'snapjs-left');
+            }
+
+            utils.dispatchEvent('animated');
+            utils.events.removeEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
+        },
+
+        /**
+         * Animates the pane by the specified amount of pixels
+         * @param  {Number} n The amount of pixels to move the pane
+         */
+        easeTo: function(n) {
+
+            if( !cache.canTransform ){
+                cache.translation = n;
+                action.translate.x(n);
+            } else {
+                cache.easing = true;
+                cache.easingTo = n;
+
+                settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
+
+                utils.events.addEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
+                action.translate.x(n);
+            }
+            if(n===0){
+                settings.element.style[cache.vendor+'Transform'] = '';
+            }
+        },
+
+        /**
+         * Immediately translates the element on its X axis
+         * @param  {Number} n Amount of pixels to translate
+         */
+        x: function(n) {
+            if( (settings.disable==='left' && n>0) ||
+                (settings.disable==='right' && n<0)
+            ){ return; }
+
+            if( !settings.hyperextensible ){
+                if( n===settings.maxPosition || n>settings.maxPosition ){
+                    n=settings.maxPosition;
+                } else if( n===settings.minPosition || n<settings.minPosition ){
+                    n=settings.minPosition;
+                }
+            }
+
+            n = parseInt(n, 10);
+            if(isNaN(n)){
+                n = 0;
+            }
+
+            if( cache.canTransform ){
+                var theTranslate = 'translate3d(' + n + 'px, 0,0)';
+                settings.element.style[cache.vendor+'Transform'] = theTranslate;
+            } else {
+                settings.element.style.width = (win.innerWidth || doc.documentElement.clientWidth)+'px';
+
+                settings.element.style.left = n+'px';
+                settings.element.style.right = '';
+            }
+        }
+    },
+
+    /**
+     * Handles all the events that interface with dragging
+     * @type {Object}
+     */
+    drag: {
+
+        /**
+         * Begins listening for drag events on our element
+         */
+        listen: function() {
+            cache.translation = 0;
+            cache.easing = false;
+            utils.events.addEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
+            utils.events.addEvent(settings.element, utils.eventType('move'), action.drag.dragging);
+            utils.events.addEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
+        },
+
+        /**
+         * Stops listening for drag events on our element
+         */
+        stopListening: function() {
+            utils.events.removeEvent(settings.element, utils.eventType('down'), action.drag.startDrag);
+            utils.events.removeEvent(settings.element, utils.eventType('move'), action.drag.dragging);
+            utils.events.removeEvent(settings.element, utils.eventType('up'), action.drag.endDrag);
+        },
+
+        /**
+         * Fired immediately when the user begins to drag the content pane
+         * @param  {Object} e Event object
+         */
+        startDrag: function(e) {
+            // No drag on ignored elements
+            var target = e.target ? e.target : e.srcElement,
+                ignoreParent = utils.parentUntil(target, 'data-snap-ignore');
+
+            if (ignoreParent) {
+                utils.dispatchEvent('ignore');
+                return;
+            }
+
+
+            if(settings.dragger){
+                var dragParent = utils.parentUntil(target, settings.dragger);
+
+                // Only use dragger if we're in a closed state
+                if( !dragParent &&
+                    (cache.translation !== settings.minPosition &&
+                    cache.translation !== settings.maxPosition
+                )){
+                    return;
+                }
+            }
+
+            utils.dispatchEvent('start');
+            settings.element.style[cache.vendor+'Transition'] = '';
+            cache.isDragging = true;
+            cache.hasIntent = null;
+            cache.intentChecked = false;
+            cache.startDragX = utils.page('X', e);
+            cache.startDragY = utils.page('Y', e);
+            cache.dragWatchers = {
+                current: 0,
+                last: 0,
+                hold: 0,
+                state: ''
+            };
+            cache.simpleStates = {
+                opening: null,
+                towards: null,
+                hyperExtending: null,
+                halfway: null,
+                flick: null,
+                translation: {
+                    absolute: 0,
+                    relative: 0,
+                    sinceDirectionChange: 0,
+                    percentage: 0
+                }
+            };
+        },
+
+        /**
+         * Fired while the user is moving the content pane
+         * @param  {Object} e Event object
+         */
+        dragging: function(e) {
+            if (cache.isDragging && settings.touchToDrag) {
+
+                var thePageX = utils.page('X', e),
+                    thePageY = utils.page('Y', e),
+                    translated = cache.translation,
+                    absoluteTranslation = action.translate.get.matrix(4),
+                    whileDragX = thePageX - cache.startDragX,
+                    openingLeft = absoluteTranslation > 0,
+                    translateTo = whileDragX,
+                    diff;
+
+                // Shown no intent already
+                if((cache.intentChecked && !cache.hasIntent)){
+                    return;
+                }
+
+                if(settings.addBodyClasses){
+                    if((absoluteTranslation)>0){
+                        utils.klass.add(doc.body, 'snapjs-left');
+                        utils.klass.remove(doc.body, 'snapjs-right');
+                    } else if((absoluteTranslation)<0){
+                        utils.klass.add(doc.body, 'snapjs-right');
+                        utils.klass.remove(doc.body, 'snapjs-left');
+                    }
+                }
+
+                if (cache.hasIntent === false || cache.hasIntent === null) {
+                    var deg = utils.angleOfDrag(thePageX, thePageY),
+                        inRightRange = (deg >= 0 && deg <= settings.slideIntent) || (deg <= 360 && deg > (360 - settings.slideIntent)),
+                        inLeftRange = (deg >= 180 && deg <= (180 + settings.slideIntent)) || (deg <= 180 && deg >= (180 - settings.slideIntent));
+                    if (!inLeftRange && !inRightRange) {
+                        cache.hasIntent = false;
+                    } else {
+                        cache.hasIntent = true;
+                    }
+                    cache.intentChecked = true;
+                }
+
+                if (
+                    (settings.minDragDistance>=Math.abs(thePageX-cache.startDragX)) || // Has user met minimum drag distance?
+                    (cache.hasIntent === false)
+                ) {
+                    return;
+                }
+
+                utils.events.prevent(e);
+                utils.dispatchEvent('drag');
+
+                cache.dragWatchers.current = thePageX;
+                // Determine which direction we are going
+                if (cache.dragWatchers.last > thePageX) {
+                    if (cache.dragWatchers.state !== 'left') {
+                        cache.dragWatchers.state = 'left';
+                        cache.dragWatchers.hold = thePageX;
+                    }
+                    cache.dragWatchers.last = thePageX;
+                } else if (cache.dragWatchers.last < thePageX) {
+                    if (cache.dragWatchers.state !== 'right') {
+                        cache.dragWatchers.state = 'right';
+                        cache.dragWatchers.hold = thePageX;
+                    }
+                    cache.dragWatchers.last = thePageX;
+                }
+                if (openingLeft) {
+                    // Pulling too far to the right
+                    if (settings.maxPosition < absoluteTranslation) {
+                        diff = (absoluteTranslation - settings.maxPosition) * settings.resistance;
+                        translateTo = whileDragX - diff;
+                    }
+                    cache.simpleStates = {
+                        opening: 'left',
+                        towards: cache.dragWatchers.state,
+                        hyperExtending: settings.maxPosition < absoluteTranslation,
+                        halfway: absoluteTranslation > (settings.maxPosition / 2),
+                        flick: Math.abs(cache.dragWatchers.current - cache.dragWatchers.hold) > settings.flickThreshold,
+                        translation: {
+                            absolute: absoluteTranslation,
+                            relative: whileDragX,
+                            sinceDirectionChange: (cache.dragWatchers.current - cache.dragWatchers.hold),
+                            percentage: (absoluteTranslation/settings.maxPosition)*100
+                        }
+                    };
+                } else {
+                    // Pulling too far to the left
+                    if (settings.minPosition > absoluteTranslation) {
+                        diff = (absoluteTranslation - settings.minPosition) * settings.resistance;
+                        translateTo = whileDragX - diff;
+                    }
+                    cache.simpleStates = {
+                        opening: 'right',
+                        towards: cache.dragWatchers.state,
+                        hyperExtending: settings.minPosition > absoluteTranslation,
+                        halfway: absoluteTranslation < (settings.minPosition / 2),
+                        flick: Math.abs(cache.dragWatchers.current - cache.dragWatchers.hold) > settings.flickThreshold,
+                        translation: {
+                            absolute: absoluteTranslation,
+                            relative: whileDragX,
+                            sinceDirectionChange: (cache.dragWatchers.current - cache.dragWatchers.hold),
+                            percentage: (absoluteTranslation/settings.minPosition)*100
+                        }
+                    };
+                }
+                action.translate.x(translateTo + translated);
+            }
+        },
+
+        /**
+         * Fired when the user releases the content pane
+         * @param  {Object} e Event object
+         */
+        endDrag: function(e) {
+            if (cache.isDragging) {
+                utils.dispatchEvent('end');
+                var translated = action.translate.get.matrix(4);
+
+                // Tap Close
+                if (cache.dragWatchers.current === 0 && translated !== 0 && settings.tapToClose) {
+                    utils.dispatchEvent('close');
+                    utils.events.prevent(e);
+                    action.translate.easeTo(0);
+                    cache.isDragging = false;
+                    cache.startDragX = 0;
+                    return;
+                }
+
+                // Revealing Left
+                if (cache.simpleStates.opening === 'left') {
+                    // Halfway, Flicking, or Too Far Out
+                    if ((cache.simpleStates.halfway || cache.simpleStates.hyperExtending || cache.simpleStates.flick)) {
+                        if (cache.simpleStates.flick && cache.simpleStates.towards === 'left') { // Flicking Closed
+                            action.translate.easeTo(0);
+                        } else if (
+                            (cache.simpleStates.flick && cache.simpleStates.towards === 'right') || // Flicking Open OR
+                            (cache.simpleStates.halfway || cache.simpleStates.hyperExtending) // At least halfway open OR hyperextending
+                        ) {
+                            action.translate.easeTo(settings.maxPosition); // Open Left
+                        }
+                    } else {
+                        action.translate.easeTo(0); // Close Left
+                    }
+                    // Revealing Right
+                } else if (cache.simpleStates.opening === 'right') {
+                    // Halfway, Flicking, or Too Far Out
+                    if ((cache.simpleStates.halfway || cache.simpleStates.hyperExtending || cache.simpleStates.flick)) {
+                        if (cache.simpleStates.flick && cache.simpleStates.towards === 'right') { // Flicking Closed
+                            action.translate.easeTo(0);
+                        } else if (
+                            (cache.simpleStates.flick && cache.simpleStates.towards === 'left') || // Flicking Open OR
+                            (cache.simpleStates.halfway || cache.simpleStates.hyperExtending) // At least halfway open OR hyperextending
+                        ) {
+                            action.translate.easeTo(settings.minPosition); // Open Right
+                        }
+                    } else {
+                        action.translate.easeTo(0); // Close Right
+                    }
+                }
+                cache.isDragging = false;
+                cache.startDragX = utils.page('X', e);
+            }
+        }
+    }
+};
+
+
+
+/**
+ * Opens the specified side menu
+ * @param  {String} side Must be "left" or "right"
+ */
+Snap.prototype.open = function(side) {
+    utils.dispatchEvent('open');
+    utils.klass.remove(doc.body, 'snapjs-expand-left');
+    utils.klass.remove(doc.body, 'snapjs-expand-right');
+
+    if (side === 'left') {
+        cache.simpleStates.opening = 'left';
+        cache.simpleStates.towards = 'right';
+        utils.klass.add(doc.body, 'snapjs-left');
+        utils.klass.remove(doc.body, 'snapjs-right');
+        action.translate.easeTo(settings.maxPosition);
+    } else if (side === 'right') {
+        cache.simpleStates.opening = 'right';
+        cache.simpleStates.towards = 'left';
+        utils.klass.remove(doc.body, 'snapjs-left');
+        utils.klass.add(doc.body, 'snapjs-right');
+        action.translate.easeTo(settings.minPosition);
+    }
+};
+
+/**
+ * Closes the pane
+ */
+Snap.prototype.close = function() {
+    utils.dispatchEvent('close');
+    action.translate.easeTo(0);
+};
+
+/**
+ * Hides the content pane completely allowing for full menu visibility
+ * @param  {String} side Must be "left" or "right"
+ */
+Snap.prototype.expand = function(side){
+    var to = win.innerWidth || doc.documentElement.clientWidth;
+
+    if(side==='left'){
+        utils.dispatchEvent('expandLeft');
+        utils.klass.add(doc.body, 'snapjs-expand-left');
+        utils.klass.remove(doc.body, 'snapjs-expand-right');
+    } else {
+        utils.dispatchEvent('expandRight');
+        utils.klass.add(doc.body, 'snapjs-expand-right');
+        utils.klass.remove(doc.body, 'snapjs-expand-left');
+        to *= -1;
+    }
+    action.translate.easeTo(to);
+};
+
+/**
+ * Listen in to custom Snap events
+ * @param  {String}   evt The snap event name
+ * @param  {Function} fn  Callback function
+ * @return {Object}       Snap instance
+ */
+Snap.prototype.on = function(evt, fn) {
+    eventList[evt] = fn;
+    return this;
+};
+
+/**
+ * Stops listening to custom Snap events
+ * @param  {String} evt The snap event name
+ */
+Snap.prototype.off = function(evt) {
+    if (eventList[evt]) {
+        eventList[evt] = false;
+    }
+};
+
+/**
+ * Enables Snap.js events
+ */
+Snap.prototype.enable = function() {
+    utils.dispatchEvent('enable');
+    action.drag.listen();
+};
+
+/**
+ * Disables Snap.js events
+ */
+Snap.prototype.disable = function() {
+    utils.dispatchEvent('disable');
+    action.drag.stopListening();
+};
+
+/**
+ * Updates the instances settings
+ * @param  {Object} opts The Snap options to set
+ */
+Snap.prototype.settings = function(opts){
+    utils.extend(settings, opts);
+};
+
+/**
+ * Returns information about the state of the content pane
+ * @return {Object} Information regarding the state of the pane
+ */
+Snap.prototype.state = function() {
+    var state,
+        fromLeft = action.translate.get.matrix(4);
+    if (fromLeft === settings.maxPosition) {
+        state = 'left';
+    } else if (fromLeft === settings.minPosition) {
+        state = 'right';
+    } else {
+        state = 'closed';
+    }
+    return {
+        state: state,
+        info: cache.simpleStates
+    };
+};
+
+}).call(this, window, document);
