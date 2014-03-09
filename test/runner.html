@@ -10,6 +10,12 @@
         <link rel="stylesheet" type="text/css" href="../dist/latest/snap.css" />
         <link rel="stylesheet" type="text/css" href="../demo/assets/demo.css" />
         <link rel="stylesheet" type="text/css" href="../node_modules/mocha/mocha.css">
+
+        <style>
+            body, html {
+                overflow: auto;
+            }
+        </style>
     </head>
     <body>
 
@@ -38,17 +44,21 @@
 
         </div>
 
-        <script type="text/javascript" src="../dist/latest/snap.js"></script>
+        <script type="text/javascript" src="../dist/latest/snap.js" data-cover></script>
 
         <script src="../node_modules/mocha/mocha.js"></script>
         <script src="../node_modules/chai/chai.js"></script>
+        <script src="../node_modules/blanket/dist/mocha/blanket_mocha.js"></script>
+
         <script>
-            mocha.ui('bdd');
+            mocha.setup('bdd');
             var assert = chai.assert;
             var expect = chai.expect;
             var should = chai.should();
         </script>
+
         <script src="tests.js"></script>
+
         <script>
             window.onload = function(){
                 (window.mochaPhantomJS) ? mochaPhantomJS.run() : mocha.run();

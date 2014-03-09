@@ -17,6 +17,7 @@
     "grunt-contrib-jshint": "0.8.0",
     "mocha": "*",
     "chai": "*",
+    "blanket": "git://github.com/jayd3e/blanket.git#fix.369",
     "phantomjs": "1.9.1-0",
     "mocha-phantomjs": "3.1.4"
   }
