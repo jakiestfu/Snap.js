@@ -95,6 +95,6 @@ module.exports = function(grunt) {
     // Register Everything
     grunt.registerTask('dynamicWrites', 'Writes variables to static files', dynamicWrites);
 
-    grunt.registerTask('default', ['sass', 'concat', 'jshint', 'copy', 'dynamicWrites']);
-    grunt.registerTask('develop', ['sass', 'concat', 'jshint', 'copy', 'dynamicWrites', 'watch']);
+    grunt.registerTask('default', ['sass', 'concat', 'jshint', 'uglify', 'copy', 'dynamicWrites']);
+    grunt.registerTask('develop', ['sass', 'concat', 'jshint', 'uglify', 'copy', 'dynamicWrites', 'watch']);
 };

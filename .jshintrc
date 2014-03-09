@@ -1,5 +1,5 @@
 {
-	"curly": true,
+    "curly": true,
     "eqnull": true,
     "browser": true,
     "globals": {
