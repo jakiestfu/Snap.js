@@ -70,7 +70,7 @@
      * @param  {String}  name The class name to search for
      * @return {Boolean}      Returns true if the class exists
      */
-    utils.hasClass = function(el, name){
+    utils.hasClass = function(el, name) {
         return (el.className).indexOf(name) !== -1;
     };
 
@@ -79,7 +79,7 @@
      * @param  {Object}  el   The element to add to
      * @param  {String}  name The class name to add
      */
-    utils.addClass = function(el, name){
+    utils.addClass = function(el, name) {
         if (!utils.hasClass(el, name)) {
             el.className += " " + name;
         }
@@ -90,7 +90,7 @@
      * @param  {Object} el   The element to remove from
      * @param  {String} name The class name to remove
      */
-    utils.removeClass = function(el, name){
+    utils.removeClass = function(el, name) {
         if (utils.hasClass(el, name)) {
             el.className = (el.className).replace(name, "").replace(/^\s+|\s+$/g, '');
         }
@@ -204,7 +204,7 @@
          * Determines if the users browser supports CSS3 transformations
          * @return {[type]} [description]
          */
-        canTransform: function(){
+        canTransform: function() {
             return typeof this.settings.element.style[this.cache.vendor+'Transform'] !== 'undefined';
         },
 
@@ -229,7 +229,7 @@
          * @param  {Object} e The event object being triggered
          * @return {Number}   The desired coordiante for the events interaction
          */
-        page: function(t, e){
+        page: function(t, e) {
             return (this.cache.hasTouch && e.touches.length && e.touches[0]) ? e.touches[0]['page'+t] : e['page'+t];
         },
 
@@ -252,7 +252,7 @@
          * Determines the browsers vendor prefix for transition callback events
          * @return {String} The event name
          */
-        transitionCallback: function(){
+        transitionCallback: function() {
             return (this.cache.vendor==='Moz' || this.cache.vendor==='ms') ? 'transitionend' : this.cache.vendor+'TransitionEnd';
         }
     });
@@ -288,7 +288,7 @@
          * @return {Number}       The amount of pixels an element is translated
          */
         matrix: function(index) {
-            if (!this.cache.canTransform){
+            if (!this.cache.canTransform) {
                 return parseInt(this.settings.element.style.left, 10);
             } else {
                 var matrix = win.getComputedStyle(this.settings.element)[this.cache.vendor+'Transform'].match(/\((.*)\)/),
@@ -761,7 +761,7 @@
          * Updates the instances settings
          * @param  {Object} opts The Snap options to set
          */
-        settings: function(opts){
+        settings: function(opts) {
             utils.extend(this.settings, opts);
         },
 
