@@ -762,6 +762,9 @@
          * @param  {Object} opts The Snap options to set
          */
         settings: function(opts) {
+            if(!opts){
+                return this.settings;
+            }
             utils.extend(this.settings, opts);
         },
 
