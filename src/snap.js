@@ -1,4 +1,3 @@
-/*! Snap.js v2.0.0-rc1 */
 (function(win, doc) {
 
     'use strict';

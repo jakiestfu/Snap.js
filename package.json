@@ -6,6 +6,7 @@
     "url": "https://github.com/jakiestfu/Snap.js.git"
   },
   "devDependencies": {
+    "async": "*",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
     "grunt-contrib-watch": "~0.5.3",

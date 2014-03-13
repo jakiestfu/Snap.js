@@ -25,7 +25,7 @@ module.exports = function(grunt) {
                     banner: "/* Snap.css v<%= pkg.version %> */"
                 },
                 files: {
-                    'dist/latest/snap.css': 'src/css/snap.scss'
+                    'dist/latest/snap.css': 'src/snap.scss'
                 }
             }
         },
@@ -36,10 +36,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-                    'src/js/snap.js',
-                    'src/js/utils.js',
-                    'src/js/action.js',
-                    'src/js/api.js'
+                    'src/snap.js',
                 ],
                 dest: 'dist/latest/snap.js'
             }
@@ -72,17 +69,16 @@ module.exports = function(grunt) {
 
         watch: {
             css: {
-                files: 'src/css/*.scss',
+                files: 'src/*.scss',
                 tasks: ['sass', 'copy', 'dynamicWrites']
             },
             scripts: {
-                files: 'src/js/*.js',
+                files: 'src/*.js',
                 tasks: ['concat', 'jshint', 'uglify', 'copy', 'dynamicWrites']
             }
         }
     });
 
-    grunt.loadTasks('tasks');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-concat');
