@@ -312,10 +312,17 @@
                     }
                 },
 
+                easeFacade: function(cb){
+                    if(typeof cb == "function"){
+                        cb.apply();
+                    }
+                    return action.translate.easeCallback;
+                },
+
                 /**
                  * Called when the element has finished transitioning
                  */
-                easeCallback: function(){
+                easeCallback: function(fn){
                     settings.element.style[cache.vendor+'Transition'] = '';
                     cache.translation = action.translate.get.matrix(4);
                     cache.easing = false;
@@ -325,15 +332,21 @@
                         utils.klass.remove(doc.body, 'snapjs-left');
                     }
 
+                    if( cache.once ){
+                        cache.once.apply();
+                        delete cache.once;
+                    }
+
                     utils.dispatchEvent('animated');
                     utils.events.removeEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
+
                 },
 
                 /**
                  * Animates the pane by the specified amount of pixels
                  * @param  {Number} n The amount of pixels to move the pane
                  */
-                easeTo: function(n) {
+                easeTo: function(n, cb) {
 
                     if( !cache.canTransform ){
                         cache.translation = n;
@@ -343,6 +356,8 @@
                         cache.easingTo = n;
 
                         settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
+
+                        cache.once = cb;
 
                         utils.events.addEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
                         action.translate.x(n);
@@ -523,6 +538,7 @@
                         utils.dispatchEvent('drag');
 
                         cache.dragWatchers.current = thePageX;
+
                         // Determine which direction we are going
                         if (cache.dragWatchers.last > thePageX) {
                             if (cache.dragWatchers.state !== 'left') {
@@ -654,7 +670,7 @@
          * Opens the specified side menu
          * @param  {String} side Must be "left" or "right"
          */
-        open: function(side) {
+        open: function(side, cb) {
             utils.dispatchEvent('open');
             utils.klass.remove(doc.body, 'snapjs-expand-left');
             utils.klass.remove(doc.body, 'snapjs-expand-right');
@@ -664,22 +680,22 @@
                 this.cache.simpleStates.towards = 'right';
                 utils.klass.add(doc.body, 'snapjs-left');
                 utils.klass.remove(doc.body, 'snapjs-right');
-                this.action.translate.easeTo(this.settings.maxPosition);
+                this.action.translate.easeTo(this.settings.maxPosition, cb);
             } else if (side === 'right') {
                 this.cache.simpleStates.opening = 'right';
                 this.cache.simpleStates.towards = 'left';
                 utils.klass.remove(doc.body, 'snapjs-left');
                 utils.klass.add(doc.body, 'snapjs-right');
-                this.action.translate.easeTo(this.settings.minPosition);
+                this.action.translate.easeTo(this.settings.minPosition, cb);
             }
         },
 
         /**
          * Closes the pane
          */
-        close: function() {
+        close: function(cb) {
             utils.dispatchEvent('close');
-            this.action.translate.easeTo(0);
+            this.action.translate.easeTo(0, cb);
         },
 
         /**

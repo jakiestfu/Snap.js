@@ -20,7 +20,7 @@ describe("Translations", function() {
 
         var snapper = _makeSnap();
 
-        snapper.on('animated', function(t){
+        snapper.open('left', function(t){
             var data = snapper.state();
 
             expect(data.state).to.equal('left');
@@ -28,15 +28,13 @@ describe("Translations", function() {
             snapper.off('animated');
             done();
         });
-
-        snapper.open('left');
     });
 
     it("It should open Right", function(done) {
 
         var snapper = _makeSnap();
 
-        snapper.on('animated', function(t){
+        snapper.open('right', function(t){
             var data = snapper.state();
 
             expect(data.state).to.equal('right');
@@ -44,15 +42,13 @@ describe("Translations", function() {
             snapper.off('animated');
             done();
         });
-
-        snapper.open('right');
     });
 
     it("It should close", function(done) {
 
         var snapper = _makeSnap();
 
-        snapper.on('animated', function(t) {
+        snapper.close(function(t) {
             var data = snapper.state();
 
             expect(data.state).to.equal('closed');
@@ -60,8 +56,6 @@ describe("Translations", function() {
             snapper.off('animated');
             done();
         });
-
-        snapper.close();
     });
 });
 
@@ -76,7 +70,7 @@ describe("Instances", function() {
                     element: document.getElementById('box-B')
                 });
 
-                snapperB.on('animated', function(t){
+                snapperB.open('right', function(t){
                     var data = snapperB.state();
 
                     expect(data.state).to.equal('right');
@@ -85,8 +79,6 @@ describe("Instances", function() {
                     console.log('F');
                     cb(null, 'completed');
                 });
-                console.log('f');
-                snapperB.open('right');
             },
 
             function(cb){
@@ -97,7 +89,7 @@ describe("Instances", function() {
                     maxPosition: 100
                 });
 
-                snapperC.on('animated', function(t){
+                snapperC.open('left', function(t){
                     var data = snapperC.state();
 
                     expect(data.state).to.equal('left');
@@ -105,14 +97,8 @@ describe("Instances", function() {
                     snapperC.off('animated');
                     cb(null, 'completed');
                 });
-
-                snapperC.open('left');
             }
-        ], function(e, r){
-            console.log(e, r);
-            done();
-        });
-        done();
+        ], done);
     })
 
 });
