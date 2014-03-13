@@ -157,7 +157,6 @@
              * @param  {String} type The event name
              */
             dispatchEvent: function(type) {
-                //console.log('Dispatching '+type);
                 if( typeof eventList[type] === 'function') {
                     return eventList[type].apply();
                 }
@@ -303,6 +302,8 @@
                                 ieOffset = 8;
                             if (matrix) {
                                 matrix = matrix[1].split(',');
+
+                                // Internet Explorer likes to give us 16 fucking values
                                 if(matrix.length===16){
                                     index+=ieOffset;
                                 }
@@ -311,13 +312,6 @@
                             return 0;
                         }
                     }
-                },
-
-                easeFacade: function(cb){
-                    if(typeof cb == "function"){
-                        cb.apply();
-                    }
-                    return action.translate.easeCallback;
                 },
 
                 /**
@@ -334,7 +328,7 @@
                     }
 
                     if( cache.once ){
-                        cache.once.apply();
+                        cache.once.call(self, self.state());
                         delete cache.once;
                     }
 

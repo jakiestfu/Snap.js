@@ -20,12 +20,8 @@ describe("Translations", function() {
 
         var snapper = _makeSnap();
 
-        snapper.open('left', function(t){
-            var data = snapper.state();
-
+        snapper.open('left', function(data){
             expect(data.state).to.equal('left');
-
-            snapper.off('animated');
             done();
         });
     });
@@ -34,12 +30,8 @@ describe("Translations", function() {
 
         var snapper = _makeSnap();
 
-        snapper.open('right', function(t){
-            var data = snapper.state();
-
+        snapper.open('right', function(data){
             expect(data.state).to.equal('right');
-
-            snapper.off('animated');
             done();
         });
     });
@@ -48,12 +40,8 @@ describe("Translations", function() {
 
         var snapper = _makeSnap();
 
-        snapper.close(function(t) {
-            var data = snapper.state();
-
+        snapper.close(function(data) {
             expect(data.state).to.equal('closed');
-
-            snapper.off('animated');
             done();
         });
     });
@@ -63,41 +51,50 @@ describe("Instances", function() {
 
     it('It should remain independent', function(done){
 
+        // Increase the timeout
+        this.timeout(10*1000);
+
+        var snapperB = _makeSnap({
+            element: document.getElementById('box-B')
+        });
+        var snapperC = _makeSnap({
+            element: document.getElementById('box-C'),
+            minPosition: -100,
+            maxPosition: 100
+        });
         async.series([
+
+            // Open right
             function(cb){
-
-                var snapperB = _makeSnap({
-                    element: document.getElementById('box-B')
-                });
-
-                snapperB.open('right', function(t){
-                    var data = snapperB.state();
-
+                snapperB.open('right', function(data){
                     expect(data.state).to.equal('right');
-
-                    snapperB.off('animated');
-                    console.log('F');
                     cb(null, 'completed');
                 });
             },
 
+            // Open left
             function(cb){
-
-                var snapperC = _makeSnap({
-                    element: document.getElementById('box-C'),
-                    minPosition: -100,
-                    maxPosition: 100
-                });
-
-                snapperC.open('left', function(t){
-                    var data = snapperC.state();
-
+                snapperC.open('left', function(data){
                     expect(data.state).to.equal('left');
-
-                    snapperC.off('animated');
                     cb(null, 'completed');
                 });
-            }
+            },
+
+            // Close right
+            function(cb){
+                snapperB.close(function(data){
+                    expect(data.state).to.equal('closed');
+                    cb(null, 'completed');
+                });
+            },
+
+            // Close left
+            function(cb){
+                snapperC.close(function(data){
+                    expect(data.state).to.equal('closed');
+                    cb(null, 'completed');
+                });
+            },
         ], done);
     })
 
